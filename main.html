@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Yên Tử — Vẻ Đẹp Thiền Tịnh</title>
+<meta name="description" content="Yên Tử - quảng bá, ảnh, bản đồ và âm thanh thiên nhiên." />
+<style>
+  :root{
+    --accent:#78b6d9;
+    --bg-light: linear-gradient(135deg,#b7e3f2 0%,#eaf9ff 100%);
+    --bg-dark: linear-gradient(135deg,#0e1a22 0%,#1f3a45 100%);
+    --glass-light: rgba(255,255,255,0.22);
+    --glass-dark: rgba(6,18,30,0.34);
+    --glass-border-light: rgba(255,255,255,0.32);
+    --glass-border-dark: rgba(255,255,255,0.07);
+    --text-dark:#0f172a;
+    --text-light:#eaf4ff;
+    --blur:12px;
+    --radius:14px;
+    --transition: .45s ease;
+  }
+  [data-theme='dark']{
+    --glass: var(--glass-dark);
+    --glass-border: var(--glass-border-dark);
+    --bg: var(--bg-dark);
+    --text: var(--text-light);
+  }
+  :root{
+    --glass: var(--glass-light);
+    --glass-border: var(--glass-border-light);
+    --bg: var(--bg-light);
+    --text: var(--text-dark);
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased;
+    transition: background var(--transition), color var(--transition);
+  }
+
+  /* Liquid glass base */
+  .glass{
+    background: var(--glass);
+    border-radius: var(--radius);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(var(--blur)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+    box-shadow: 0 8px 30px rgba(2,6,23,0.06);
+    position:relative; overflow:hidden;
+  }
+  /* very soft shimmer */
+  .glass::after{
+    content:""; position:absolute; inset:-40% -40% -40% -40%;
+    background: linear-gradient(120deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.12) 25%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.06) 75%, rgba(255,255,255,0.03) 100%);
+    filter: blur(18px); opacity:0.35; transform:translateX(-30%); mix-blend-mode:screen;
+    animation: shimmer 11s linear infinite;
+    pointer-events:none;
+  }
+  @keyframes shimmer { 0%{transform:translateX(-30%) rotate(1deg)} 50%{transform:translateX(10%) rotate(-1deg)} 100%{transform:translateX(40%) rotate(1deg)} }
+
+  /* layout */
+  .container{max-width:1100px;margin:0 auto;padding:20px}
+  header{margin:18px auto}
+  .brand{font-weight:700;color:var(--accent);font-size:1.25rem}
+  nav{display:flex;gap:18px;justify-content:center;margin:10px 0;padding:10px}
+  nav a{color:rgba(15,23,42,0.72);text-decoration:none;font-weight:600}
+  .hero{display:flex;gap:20px;align-items:center;padding:28px;border-radius:18px;margin:10px auto;max-width:1100px}
+  .hero .left{flex:1}
+  .hero h1{margin:0 0 8px;font-size:1.8rem;color:var(--accent)}
+  .hero p{margin:0;color:rgba(15,23,42,0.7)}
+  .btn{display:inline-block;padding:10px 16px;border-radius:10px;background:var(--accent);color:#fff;text-decoration:none;margin-top:12px}
+
+  /* cards */
+  .grid{display:grid;gap:16px}
+  .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+  .card{padding:14px}
+
+  /* Gallery slider */
+  .gallery{max-width:1100px;margin:26px auto}
+  .gallery h2{margin:0 0 8px;color:var(--accent)}
+  .gallery-slider{position:relative;border-radius:16px;overflow:hidden;padding:8px}
+  .gallery-viewport{overflow:hidden}
+  .slides{display:flex;transition:transform .6s cubic-bezier(.2,.9,.2,1);will-change:transform}
+  .slides img{width:100%;flex-shrink:0;height:420px;object-fit:cover;border-radius:10px}
+  .nav{position:absolute;top:50%;transform:translateY(-50%);z-index:30;background:var(--glass);width:46px;height:46px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--glass-border);cursor:pointer}
+  .nav.prev{left:12px}.nav.next{right:12px}
+  .nav:hover{transform:translateY(-50%) scale(1.06)}
+  .dots{display:flex;gap:8px;justify-content:center;margin-top:10px}
+  .dots button{width:10px;height:10px;border-radius:50%;border:0;background:rgba(255,255,255,0.4);cursor:pointer}
+  .dots button.active{background:var(--accent);width:12px;height:12px}
+
+  /* map */
+  iframe.map{width:100%;height:380px;border:0;border-radius:12px}
+
+  /* controls fixed */
+  #sound-toggle, #theme-toggle{
+    position:fixed;bottom:20px;right:20px;width:48px;height:48px;border-radius:12px;display:grid;place-items:center;z-index:999;
+    background:var(--glass);border:1px solid var(--glass-border);cursor:pointer;font-size:18px;
+  }
+  #theme-toggle{right:84px}
+
+  /* fade-in */
+  .fade-in{opacity:0;transform:translateY(20px);transition:opacity .9s ease, transform .9s ease}
+  .fade-in.visible{opacity:1;transform:none}
+
+  /* responsive */
+  @media (max-width:900px){
+    .hero{flex-direction:column}.slides img{height:320px}
+  }
+  @media (max-width:600px){
+    .slides img{height:240px}
+    nav{padding:6px;gap:10px}
+  }
+
+  /* small focus */
+  button:focus{outline:2px solid rgba(111,179,255,0.18);outline-offset:3px;border-radius:10px}
+</style>
+</head>
+<body>
+  <div class="container">
+    <header class="glass fade-in" id="header">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+        <div class="brand">Yên Tử</div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <nav aria-label="Main navigation">
+            <a href="#gioithieu">Giới thiệu</a>
+            <a href="#thuvien">Thư viện</a>
+            <a href="#thamquan">Tham quan</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section id="gioithieu" class="hero glass fade-in" aria-labelledby="hero-title">
+      <div class="left">
+        <h1 id="hero-title">Yên Tử — Núi thiêng của Phật giáo Trúc Lâm</h1>
+        <p class="lead">Hành trình trải nghiệm thiên nhiên, lịch sử và văn hóa tâm linh giữa biển mây và rừng nguyên sinh.</p>
+        <a class="btn" href="#thuvien">Xem ảnh</a>
+      </div>
+      <div style="flex:0 0 360px">
+        <div class="glass" style="height:240px;">
+          <img src="anh1.jpg" alt="Pagoda trên núi" style="width:100%;height:100%;object-fit:cover;border-radius:10px">
+        </div>
+      </div>
+    </section>
+
+    <section id="thuvien" class="gallery fade-in" aria-labelledby="gallery-title">
+      <h2 id="gallery-title">Thư viện ảnh</h2>
+      <p style="margin:6px 0 12px;color:rgba(15,23,42,0.6)">Cuộn ngang hoặc để slideshow tự chạy (5s).</p>
+
+      <div class="gallery-slider glass">
+        <button class="nav prev" id="prevBtn" aria-label="Ảnh trước">⟨</button>
+
+        <div class="gallery-viewport">
+          <div class="slides" id="slides">
+            <img src="anh1.jpg" alt="Pagoda trên núi" draggable="false">
+            <img src="anh2.jpg" alt="Tượng Phật tại Yên Tử" draggable="false">
+            <img src="anh3.jpg" alt="Cáp treo Yên Tử" draggable="false">
+            <img src="anh4.jpg" alt="Quần thể Hoa Yên" draggable="false">
+          </div>
+        </div>
+
+        <button class="nav next" id="nextBtn" aria-label="Ảnh kế">⟩</button>
+
+        <div style="padding:10px 8px">
+          <div class="dots" id="dots">
+            <button data-index="0" class="active" aria-label="Ảnh 1"></button>
+            <button data-index="1" aria-label="Ảnh 2"></button>
+            <button data-index="2" aria-label="Ảnh 3"></button>
+            <button data-index="3" aria-label="Ảnh 4"></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="thamquan" class="grid fade-in" style="grid-template-columns:repeat(2,1fr);gap:16px;margin-top:20px">
+      <div class="card glass">
+        <h3>Thiền viện Trúc Lâm</h3>
+        <p>Quần thể chùa cổ với không gian thanh tịnh.</p>
+      </div>
+      <div class="card glass">
+        <h3>Đường lên chùa Đồng</h3>
+        <p>Có cáp treo hoặc leo bộ, cảnh đẹp và biển mây.</p>
+      </div>
+
+      <!-- Map section -->
+      <div class="card glass" style="grid-column:1/-1;">
+        <h3 style="margin:0 0 8px">Bản đồ Yên Tử</h3>
+        <p style="margin:0 0 8px;color:rgba(15,23,42,0.6)">Xem vị trí & hướng đi (mở được Google Maps để định đường).</p>
+        <iframe
+          class="map"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.833346908859!2d106.73966577482435!3d21.04619098735138!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31358562b4f12d3f%3A0xb426c11b45d524a9!2zWWVuxKkgVOG7pQ!5e0!3m2!1svi!2s!4v1691234567890!5m2!1svi!2s"
+          loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </section>
+
+    <footer class="glass fade-in" style="margin:28px auto;padding:12px;text-align:center;">
+      <div>© <span id="year"></span> Yên Tử — Khám phá & Hành hương</div>
+    </footer>
+  </div>
+
+  <!-- Controls: Theme + Sound -->
+  <button id="theme-toggle" title="Chuyển chủ đề">🌓</button>
+  <button id="sound-toggle" title="Bật/Tắt âm thanh">🔊</button>
+
+  <!-- Ambient audio (place wind.mp3 in same folder) -->
+  <audio id="ambient-audio" loop preload="none">
+    <source src="wind.mp3" type="audio/mpeg">
+    <!-- optional: provide ogg fallback -->
+  </audio>
+
+<script>
+/* =========================
+   Theme handling (light/dark/auto)
+   ========================= */
+const THEME_KEY = 'yt_theme_mode';
+const themeBtn = document.getElementById('theme-toggle');
+function systemDark(){ return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; }
+function applyTheme(mode){
+  const applied = mode === 'auto' ? (systemDark() ? 'dark' : 'light') : mode;
+  document.documentElement.setAttribute('data-theme', applied);
+  // icon
+  themeBtn.textContent = applied === 'dark' ? '☀️' : '🌓';
+  localStorage.setItem(THEME_KEY, mode);
+}
+function getTheme(){ return localStorage.getItem(THEME_KEY) || 'auto'; }
+themeBtn.addEventListener('click', ()=>{
+  const cur = getTheme();
+  const next = cur === 'auto' ? 'light' : cur === 'light' ? 'dark' : 'auto';
+  applyTheme(next);
+});
+if(window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ()=> { if(getTheme() === 'auto') applyTheme('auto'); });
+applyTheme(getTheme());
+
+/* =========================
+   Slider logic (auto 5s + controls + swipe)
+   ========================= */
+(function(){
+  const slides = document.getElementById('slides');
+  const imgs = slides.querySelectorAll('img');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const dots = Array.from(document.querySelectorAll('#dots button'));
+  const total = imgs.length;
+  let index = 0;
+  let autoPlay;
+
+  function goTo(i, animate=true){
+    index = (i % total + total) % total;
+    slides.style.transition = animate ? 'transform .6s cubic-bezier(.2,.9,.2,1)' : 'none';
+    slides.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach(d => d.classList.remove('active'));
+    dots[index].classList.add('active');
+  }
+
+  prevBtn.addEventListener('click', ()=> goTo(index - 1));
+  nextBtn.addEventListener('click', ()=> goTo(index + 1));
+  dots.forEach(d => d.addEventListener('click', ()=> goTo(Number(d.dataset.index))));
+
+  // keyboard
+  window.addEventListener('keydown', e => { if(e.key === 'ArrowLeft') goTo(index - 1); if(e.key === 'ArrowRight') goTo(index + 1); });
+
+  // touch
+  let startX=0, isDragging=false, prevTranslate=0;
+  slides.addEventListener('touchstart', e => { isDragging=true; startX = e.touches[0].clientX; prevTranslate = -index*slides.clientWidth; slides.style.transition='none'; }, {passive:true});
+  slides.addEventListener('touchmove', e => { if(!isDragging) return; const dx = e.touches[0].clientX - startX; slides.style.transform = `translateX(${prevTranslate + dx}px)`; }, {passive:true});
+  slides.addEventListener('touchend', e => { if(!isDragging) return; isDragging=false; const dx = e.changedTouches[0].clientX - startX; if(Math.abs(dx) > 60) goTo(index + (dx < 0 ? 1 : -1)); else goTo(index); });
+
+  // mouse drag (optional)
+  let mouseDown=false;
+  slides.addEventListener('mousedown', e => { mouseDown=true; startX=e.clientX; prevTranslate = -index*slides.clientWidth; slides.style.transition='none'; });
+  window.addEventListener('mousemove', e => { if(!mouseDown) return; const dx=e.clientX-startX; slides.style.transform = `translateX(${prevTranslate + dx}px)`; });
+  window.addEventListener('mouseup', e => { if(!mouseDown) return; mouseDown=false; const dx=e.clientX-startX; if(Math.abs(dx) > 60) goTo(index + (dx < 0 ? 1 : -1)); else goTo(index); });
+
+  // prevent image drag
+  imgs.forEach(img => img.addEventListener('dragstart', e => e.preventDefault()));
+
+  // autoplay 5s
+  function startAuto(){ autoPlay = setInterval(()=> goTo(index + 1), 5000); }
+  function stopAuto(){ clearInterval(autoPlay); }
+  startAuto();
+  const sliderArea = document.querySelector('.gallery-slider');
+  sliderArea.addEventListener('mouseenter', stopAuto);
+  sliderArea.addEventListener('mouseleave', startAuto);
+
+  // init
+  goTo(0, false);
+})();
+
+/* =========================
+   Ambient audio: auto play AFTER first user interaction
+   - also provide manual toggle; remember preference in localStorage
+   ========================= */
+const AUDIO_KEY = 'yt_sound_pref';
+const soundBtn = document.getElementById('sound-toggle');
+const ambient = document.getElementById('ambient-audio');
+let soundPref = localStorage.getItem(AUDIO_KEY); // 'on' | 'off' | null
+let userInteracted = false;
+
+function setSoundUI(on){
+  soundBtn.textContent = on ? '🔈' : '🔊';
+  soundBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+}
+
+function playAmbient(){
+  ambient.play().catch(()=> {/* auto-play might be blocked until user interacts */});
+}
+
+function pauseAmbient(){ ambient.pause(); }
+
+function enableSound(doSave=true){
+  playAmbient();
+  setSoundUI(true);
+  if(doSave) localStorage.setItem(AUDIO_KEY, 'on');
+  soundPref = 'on';
+}
+function disableSound(doSave=true){
+  pauseAmbient();
+  setSoundUI(false);
+  if(doSave) localStorage.setItem(AUDIO_KEY, 'off');
+  soundPref = 'off';
+}
+
+// Set UI initial based on pref
+if(soundPref === 'on'){ setSoundUI(true); } else { setSoundUI(false); }
+
+// Toggle button manual
+soundBtn.addEventListener('click', ()=>{
+  if(soundPref === 'on'){ disableSound(); } else { enableSound(); }
+});
+
+// Play after first meaningful interaction if user didn't explicitly turn it off
+function onFirstUserInteraction(){
+  if(userInteracted) return;
+  userInteracted = true;
+  // If user previously set 'off', do nothing.
+  if(soundPref === 'off') return;
+  // Else if pref 'on' or null => start audio
+  enableSound(false); // don't overwrite preference if null; but start audio; we'll save only if they toggle explicitly.
+  // But we only save preference when user presses the sound button.
+}
+['pointerdown','keydown','touchstart','scroll'].forEach(evt=>{
+  window.addEventListener(evt, onFirstUserInteraction, {once:true, passive:true});
+});
+
+/* =========================
+   Fade-in on scroll using IntersectionObserver
+   ========================= */
+const faders = document.querySelectorAll('.fade-in');
+const io = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, {threshold: 0.12});
+faders.forEach(f => io.observe(f));
+
+/* =========================
+   Update copyright year
+   ========================= */
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
