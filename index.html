@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yên Tử - Vẻ Đẹp Thiền Tịnh</title>
+<title>Dấu Ấn Đỉnh Thiêng Yên Tử - Trường THCS Đông Xá</title>
 <style>
   :root {
     --primary: #78b6d9;
@@ -33,7 +33,7 @@
     background: linear-gradient(135deg, #0e1a22 0%, #1f3a45 100%);
   }
 
-  header, footer, .hero, .card, .gallery-slider, nav, .glass {
+  header, footer, .hero, .card, .gallery-slider, nav, .glass, .content-section {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(var(--blur));
@@ -44,7 +44,7 @@
   }
 
   /* Liquid shimmer */
-  header::before, footer::before, .hero::before, .card::before, nav::before, .gallery-slider::before {
+  header::before, footer::before, .hero::before, .card::before, nav::before, .gallery-slider::before, .content-section::before {
     content: "";
     position: absolute;
     top: -50%;
@@ -65,10 +65,17 @@
     text-align:center;
     padding: 1rem;
     margin: 1rem;
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
 
   h1 {font-size: 2rem; color: var(--primary);}
-  p {line-height:1.6;}
+  h2 {color: var(--primary); margin-bottom: 1rem;}
+  p {line-height:1.6; margin-bottom: 1rem;}
 
   nav {
     display:flex;
@@ -76,14 +83,40 @@
     gap:1.5rem;
     padding:0.5rem 1rem;
     margin-bottom:1rem;
+    animation: slideDown 1s ease-out;
   }
+  
+  @keyframes slideDown {
+    from { transform: translateY(-100px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
   nav a {
     text-decoration:none;
     color: var(--text-dark);
     font-weight:600;
     position:relative;
     transition: color .3s;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    overflow: hidden;
   }
+  
+  nav a::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.5s;
+  }
+  
+  nav a:hover::before {
+    left: 100%;
+  }
+  
   nav a::after {
     content:"";
     position:absolute;
@@ -101,6 +134,12 @@
     margin: 1rem auto;
     max-width:900px;
     color: var(--text-dark);
+    animation: fadeInScale 1.5s ease-out;
+  }
+  
+  @keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
   }
 
   .hero h2 {font-size:1.8rem; margin-bottom:1rem;}
@@ -117,7 +156,15 @@
     overflow:hidden;
     height:400px;
     border-radius:20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
   }
+  
+  .gallery-slider:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  }
+  
   .slides {
     display:flex;
     transition: transform .6s ease;
@@ -129,7 +176,13 @@
     object-fit:cover;
     cursor:pointer;
     user-select:none;
+    transition: transform 0.5s ease;
   }
+  
+  .slides img:hover {
+    transform: scale(1.05);
+  }
+  
   .slider-btn {
     position:absolute;
     top:50%;
@@ -142,8 +195,16 @@
     font-size:1.5rem;
     transition: var(--transition);
     color: var(--text-dark);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
-  .slider-btn:hover {background:rgba(255,255,255,0.6);}
+  
+  .slider-btn:hover {
+    background:rgba(255,255,255,0.6);
+    transform: translateY(-50%) scale(1.1);
+  }
+  
   #prevBtn {left:10px;}
   #nextBtn {right:10px;}
   .dots {display:flex; justify-content:center; margin-top:0.8rem; gap:0.5rem;}
@@ -155,6 +216,10 @@
     transition:.3s;
   }
   .dots button.active {background: var(--primary); width:12px; height:12px;}
+  .dots button:hover {
+    transform: scale(1.3);
+    background: var(--primary);
+  }
 
   .cards {
     display:grid;
@@ -167,10 +232,29 @@
     padding:1rem;
     color:var(--text-dark);
     transition: transform .4s, box-shadow .4s;
+    position: relative;
+    overflow: hidden;
   }
+  
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+  }
+  
+  .card:hover::before {
+    transform: translateX(100%);
+  }
+  
   .card:hover {
-    transform:translateY(-5px);
-    box-shadow:0 4px 20px rgba(0,0,0,0.1);
+    transform:translateY(-10px) rotate(1deg);
+    box-shadow:0 10px 25px rgba(0,0,0,0.15);
   }
 
   footer {
@@ -178,6 +262,12 @@
     padding:1rem;
     margin:1rem;
     color:var(--text-dark);
+    animation: fadeInUp 1s ease-out;
+  }
+  
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   #theme-toggle {
@@ -193,6 +283,20 @@
     font-size:1.3rem;
     cursor:pointer;
     z-index:1000;
+    transition: all 0.5s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  
+  #theme-toggle:hover {
+    transform: rotate(180deg) scale(1.2);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
   }
 
   /* Fade-in animation on scroll */
@@ -205,33 +309,398 @@
     opacity:1;
     transform:translateY(0);
   }
+  
+  /* Content sections */
+  .content-section {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    transition: transform 0.5s ease;
+  }
+  
+  .content-section:hover {
+    transform: translateY(-5px);
+  }
+  
+  .content-section h2 {
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .content-section h2::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary);
+    animation: expandWidth 2s ease-out forwards;
+  }
+  
+  @keyframes expandWidth {
+    to { width: 100%; }
+  }
+  
+  .content-section h3 {
+    color: var(--primary);
+    margin: 1.5rem 0 0.8rem 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    padding-left: 15px;
+  }
+  
+  .content-section h3::before {
+    content: "›";
+    position: absolute;
+    left: 0;
+    transition: transform 0.3s ease;
+  }
+  
+  .content-section h3:hover {
+    transform: translateX(5px);
+  }
+  
+  .content-section h3:hover::before {
+    transform: rotate(90deg);
+  }
+  
+  .solution-list {
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .solution-list li {
+    margin-bottom: 0.8rem;
+    position: relative;
+    padding-left: 20px;
+    transition: all 0.3s ease;
+  }
+  
+  .solution-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-weight: bold;
+    transition: transform 0.3s ease;
+  }
+  
+  .solution-list li:hover {
+    transform: translateX(5px);
+  }
+  
+  .solution-list li:hover::before {
+    transform: scale(1.5);
+  }
+
+  /* New styles for alternating image and text layout */
+  .content-block {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  
+  .content-block.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .content-block.reverse {
+    flex-direction: row-reverse;
+  }
+
+  .content-block .text-content {
+    flex: 1;
+    transition: transform 0.5s ease;
+  }
+  
+  .content-block:hover .text-content {
+    transform: translateX(5px);
+  }
+
+  .content-block.reverse:hover .text-content {
+    transform: translateX(-5px);
+  }
+
+  .content-block .image-content {
+    flex: 1;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.5s ease;
+    position: relative;
+  }
+  
+  .content-block .image-content::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(120,182,217,0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 1;
+  }
+  
+  .content-block .image-content:hover::before {
+    opacity: 1;
+  }
+
+  .content-block .image-content img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  .content-block .image-content:hover img {
+    transform: scale(1.05);
+  }
+  
+  .content-block .image-content:hover {
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transform: translateY(-5px);
+  }
+
+  /* Floating elements */
+  .floating {
+    animation: floating 3s ease-in-out infinite;
+  }
+  
+  @keyframes floating {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+  }
+  
+  /* Particle background */
+  .particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  .particle {
+    position: absolute;
+    background: rgba(120,182,217,0.3);
+    border-radius: 50%;
+    animation: particleFloat linear infinite;
+  }
+  
+  @keyframes particleFloat {
+    to { transform: translateY(-100vh); }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .content-block {
+      flex-direction: column;
+    }
+    
+    .content-block.reverse {
+      flex-direction: column;
+    }
+    
+    .content-block .text-content,
+    .content-block .image-content {
+      flex: none;
+      width: 100%;
+    }
+    
+    nav {
+      flex-wrap: wrap;
+    }
+  }
 </style>
 </head>
 <body>
-<header class="glass fade-in">
-  <h1>YÊN TỬ</h1>
-  <p>Vẻ đẹp thiền tịnh giữa núi non Quảng Ninh</p>
+<!-- Particle Background -->
+<div class="particles" id="particles"></div>
+
+<header class="glass fade-in floating">
+  <h1>DẤU ẤN ĐỈNH THIÊNG YÊN TỬ</h1>
+  <p>Trường THCS Đông Xá - Hành trình trải nghiệm văn hóa và tâm linh</p>
 </header>
 
 <nav class="glass fade-in">
   <a href="#gioithieu">Giới thiệu</a>
+  <a href="#tongquan">Tổng quan</a>
+  <a href="#giatri">Giá trị</a>
+  <a href="#giaiphap">Giải pháp</a>
   <a href="#thuvien">Thư viện</a>
-  <a href="#thamquan">Tham quan</a>
 </nav>
 
-<section id="gioithieu" class="hero glass fade-in">
-  <h2>Hành trình đến miền đất Phật</h2>
-  <p>Yên Tử là trung tâm Phật giáo Trúc Lâm nổi tiếng, nơi thiên nhiên và tâm linh hòa quyện. Đến đây, bạn sẽ cảm nhận được sự bình yên và thanh tịnh hiếm có.</p>
+<section id="gioithieu" class="content-section glass fade-in">
+  <h2>GIỚI THIỆU</h2>
+  
+  <div class="content-block">
+    <div class="text-content">
+      <p>Từ vùng đất đảo Vân Đồn giàu truyền thống hiếu học, Trường THCS Đông Xá vươn lên như một điểm sáng của giáo dục địa phương. Dưới mái trường thân thương ấy, bao thế hệ học sinh đã được nuôi dưỡng tình yêu quê hương, ý chí học tập và khát vọng vươn xa.</p>
+      <p>Với phương châm "Mỗi ngày đến trường là một ngày vui", nhà trường không chỉ chú trọng trang bị tri thức mà còn quan tâm bồi dưỡng kỹ năng, nhân cách và niềm tự hào về quê hương, đất nước cho các em học sinh.</p>
+    </div>
+    <div class="image-content">
+      <img src="anh1.jpg" alt="Trường THCS Đông Xá">
+    </div>
+  </div>
+  
+  <div class="content-block reverse">
+    <div class="text-content">
+      <p>Mỗi chuyến trải nghiệm, mỗi giờ học thực tế không chỉ là bài học về tri thức, mà còn là hành trình gieo mầm nhân ái, giúp các em thêm tự hào về quê hương và thêm yêu mái trường Đông Xá thân yêu.</p>
+      <p>Khối 9 với những học sinh cuối cấp đầy năng động và khát vọng là lực lượng nòng cốt trong các phong trào học tập, rèn luyện và trải nghiệm sáng tạo. Các em luôn thể hiện tinh thần chủ động, tự tin trong học tập, tham gia tích cực vào các chương trình ngoại khóa và hoạt động hướng nghiệp mà nhà trường tổ chức.</p>
+    </div>
+    <div class="image-content">
+      <img src="anh2.jpg" alt="Học sinh Trường THCS Đông Xá">
+    </div>
+  </div>
+  
+  <div class="content-block">
+    <div class="text-content">
+      <p>Và hành trình "Dấu ấn Đỉnh thiêng Yên Tử" chính là một dấu mốc đáng nhớ - nơi các em được hòa mình vào không gian văn hóa - tâm linh linh thiêng, được học từ thực tế, cảm từ trái tim và trưởng thành hơn trên bước đường tương lai.</p>
+    </div>
+    <div class="image-content">
+      <img src="anh3.jpg" alt="Hành trình Yên Tử">
+    </div>
+  </div>
+</section>
+
+<section id="tongquan" class="content-section glass fade-in">
+  <h2>TỔNG QUAN</h2>
+  
+  <div class="content-block">
+    <div class="text-content">
+      <h3>Nguồn gốc tên gọi</h3>
+      <p>Từ bao đời nay, tên gọi Yên Tử đã trở thành biểu tượng thiêng liêng gắn liền với lịch sử, văn hóa và tâm linh của dân tộc Việt Nam. Theo truyền thuyết dân gian, tên gọi này bắt nguồn từ đạo sĩ An Kỳ Sinh người đã đến ngọn núi này để tu tiên, luyện đan và sau đó hóa đá.</p>
+      <p>Không chỉ mang ý nghĩa huyền thoại, trong các ghi chép chính thống, Yên Tử còn được xem là một "phúc địa" linh thiêng của vùng Giao Châu xưa nơi hội tụ linh khí sông núi, trời đất giao hòa. Từ mảnh đất thiêng ấy, dòng thiền Trúc Lâm Yên Tử ra đời, kết hợp giữa "Trúc Lâm" biểu trưng cho rừng trúc thanh tịnh trong đạo Phật và "Yên Tử" nơi dòng thiền được sáng lập và phát triển.</p>
+    </div>
+    <div class="image-content">
+      <img src="anh4.jpg" alt="Nguồn gốc Yên Tử">
+    </div>
+  </div>
+  
+  <div class="content-block reverse">
+    <div class="text-content">
+      <h3>Lịch sử hình thành</h3>
+      <p>Từ xa xưa, núi Yên Tử đã được các nhà địa lý cổ phương Đông xem là một trong những phúc địa của Giao Châu, nơi tích tụ linh khí sông núi, trời đất giao hòa, giúp con người dễ dàng thoát tục để đến với không gian thanh tịnh, an nhiên.</p>
+      <p>Năm 1299, sau khi nhường ngôi cho con, vua Trần Nhân Tông - vị vua anh minh hai lần lãnh đạo dân tộc đánh thắng giặc Nguyên Mông đã lên Yên Tử xuất gia, sáng lập Thiền phái Trúc Lâm - dòng thiền thuần Việt đầu tiên, kết tinh tinh thần nhập thế và yêu nước.</p>
+    </div>
+    <div class="image-content">
+      <img src="anh5.jpg" alt="Lịch sử Yên Tử">
+    </div>
+  </div>
+  
+  <div class="content-block">
+    <div class="text-content">
+      <h3>Vị trí địa lý, công trình kiến trúc</h3>
+      <p>Núi Yên Tử nằm trong dãy Yên Tử - Bảo Đài, thuộc hệ cánh cung Đông Triều, tọa lạc ở phường Yên Tử tỉnh Quảng Ninh, là vùng đất đặc biệt nơi giao hòa giữa núi rừng, mây trời và linh khí đất trời. Với độ cao 1.068 mét so với mực nước biển.</p>
+      <p>Hành trình hành hương lên đỉnh núi là một chuỗi những di tích gắn bó chặt chẽ với nhau: từ Chùa Trình (Bí Thượng) - điểm khởi đầu của hành trình; Chùa Lân (Long Động) - nơi Phật hoàng từng giảng pháp; Chùa Giải Oan - gắn với truyền thuyết các cung phi bỏ mình để khuyên nhà vua trở lại; Chùa Hoa Yên - trung tâm tu học lớn nhất của Thiền phái, nằm ở độ cao khoảng 534m; đến Chùa Một Mái, Chùa Bảo Sái, Am Ngự Dược - những công trình thể hiện tinh thần thiền định và sự hòa hợp với thiên nhiên.</p>
+    </div>
+    <div class="image-content">
+      <img src="anh1.jpg" alt="Công trình kiến trúc Yên Tử">
+    </div>
+  </div>
+  
+  <div class="content-block reverse">
+    <div class="text-content">
+      <p>Đặc biệt, trên đỉnh Thiêng là Chùa Đồng, công trình bằng đồng nguyên chất lớn nhất Việt Nam, biểu tượng cho đức tin và lòng hướng thiện, cùng Tượng Phật hoàng Trần Nhân Tông bằng đồng cao 12,6m - công trình tôn vinh vị vua anh minh, vị tổ sáng lập Thiền phái Trúc Lâm.</p>
+    </div>
+    <div class="image-content">
+      <img src="anh2.jpg" alt="Chùa Đồng Yên Tử">
+    </div>
+  </div>
+</section>
+
+<section id="giatri" class="content-section glass fade-in">
+  <h2>GIÁ TRỊ</h2>
+  
+  <div class="content-block">
+    <div class="text-content">
+      <h3>Giá trị lịch sử</h3>
+      <p>Yên Tử trở thành biểu tượng thiêng liêng của ý chí độc lập, tự cường và tinh thần giác ngộ. Sau khi hoàn thành trọng trách với non sông, vua Trần Nhân Tông đã chọn nơi đây để xuất gia tu hành, sáng lập Thiền phái Trúc Lâm - dòng thiền mang đậm bản sắc Việt, kết tinh giữa tư tưởng Phật giáo và truyền thống yêu nước, nhân nghĩa của dân tộc.</p>
+      <p>Chính từ Yên Tử, tư tưởng "cư trần lạc đạo", "tùy duyên mà hành đạo" đã lan tỏa, góp phần hun đúc nên đời sống tinh thần hướng thiện, an hòa của người Việt. Hàng trăm di tích còn lưu giữ như chùa Hoa Yên, chùa Một Mái, am Ngọa Vân, tháp Huệ Quang... không chỉ là chứng tích vật chất về một thời kỳ vàng son trong lịch sử, mà còn là minh chứng sống động cho trí tuệ, bản lĩnh và tấm lòng vì đạo, vì đời của dân tộc Việt Nam.</p>
+    </div>
+    <div class="image-content">
+      <img src="anh3.jpg" alt="Giá trị lịch sử Yên Tử">
+    </div>
+  </div>
+  
+  <div class="content-block reverse">
+    <div class="text-content">
+      <h3>Giá trị văn hóa - tâm linh</h3>
+      <p>Không chỉ mang giá trị lịch sử to lớn, Yên Tử còn là trung tâm văn hóa - tâm linh đặc sắc, nơi hội tụ và lan tỏa những giá trị tinh thần bền vững của dân tộc Việt Nam.</p>
+      <p>Trải qua hơn bảy thế kỷ, tư tưởng Thiền phái Trúc Lâm Yên Tử vẫn soi sáng đời sống tinh thần của người Việt bằng triết lý "hòa quang đồng trần" - sống giữa đời mà vẫn giữ tâm thanh tịnh, hướng thiện.</p>
+    </div>
+    <div class="image-content">
+      <img src="anh4.jpg" alt="Giá trị văn hóa Yên Tử">
+    </div>
+  </div>
+  
+  <div class="content-block">
+    <div class="text-content">
+      <p>Hàng năm, hàng triệu lượt tăng ni, phật tử và du khách hành hương về Yên Tử không chỉ để lễ Phật, chiêm bái cảnh thiêng mà còn để tìm về cội nguồn văn hóa dân tộc, gột rửa bụi trần, hướng tới sự an nhiên trong tâm hồn. Yên Tử vì thế không chỉ là "đất tổ Phật giáo Trúc Lâm" mà còn là biểu tượng của đời sống tinh thần Việt Nam - nơi đạo và đời giao hòa, con người tìm thấy sự cân bằng, thanh thản và niềm tin vào những giá trị tốt đẹp của cuộc sống.</p>
+    </div>
+    <div class="image-content">
+      <img src="anh5.jpg" alt="Tâm linh Yên Tử">
+    </div>
+  </div>
+</section>
+
+<section id="giaiphap" class="content-section glass fade-in">
+  <h2>GIẢI PHÁP BẢO TỒN VÀ PHÁT HUY GIÁ TRỊ YÊN TỬ</h2>
+  
+  <div class="content-block">
+    <div class="text-content">
+      <p>Để giữ mãi linh hồn và vẻ đẹp của di tích Yên Tử - di sản vô giá của quê hương Quảng Ninh, mỗi người chúng ta cần:</p>
+      
+      <ul class="solution-list">
+        <li><strong>Nâng cao nhận thức và lòng tự hào dân tộc:</strong> Giáo dục học sinh, thanh thiếu niên hiểu rõ giá trị văn hóa - lịch sử của Yên Tử, từ đó hình thành ý thức trân trọng, bảo vệ di tích.</li>
+        <li><strong>Giữ gìn cảnh quan và môi trường sinh thái:</strong> Không xả rác, không phá hoại cây cối, tôn trọng không gian linh thiêng của chốn Phật môn.</li>
+        <li><strong>Phát triển du lịch bền vững:</strong> Kết hợp hài hòa giữa khai thác du lịch và bảo tồn di sản, khuyến khích du lịch xanh, du lịch trải nghiệm văn hóa.</li>
+      </ul>
+    </div>
+    <div class="image-content">
+      <img src="anh1.jpg" alt="Bảo tồn Yên Tử">
+    </div>
+  </div>
+  
+  <div class="content-block reverse">
+    <div class="text-content">
+      <ul class="solution-list">
+        <li><strong>Ứng dụng công nghệ số:</strong> Xây dựng các trang tài liệu, video, tour ảo 3D giới thiệu Yên Tử đến bạn bè trong và ngoài nước, góp phần lan tỏa giá trị di tích trong thời đại mới.</li>
+        <li><strong>Tham gia hoạt động cộng đồng:</strong> Chung tay cùng chính quyền và các tổ chức xã hội trong việc trồng cây, tu bổ, làm sạch di tích - biến tình yêu Yên Tử thành hành động thiết thực.</li>
+      </ul>
+      
+      <p>Yên Tử không chỉ là một danh thắng kỳ vĩ của vùng Đông Bắc, mà còn là biểu tượng rực sáng của tinh thần Việt Nam - nơi hội tụ giữa thiên nhiên, lịch sử và đạo pháp. Từ dấu chân của Phật hoàng Trần Nhân Tông hơn bảy thế kỷ trước đến bao thế hệ người Việt hôm nay, Yên Tử vẫn là điểm tựa tâm linh, là cội nguồn của sự thanh tịnh, trí tuệ và nhân ái.</p>
+    </div>
+    <div class="image-content">
+      <img src="anh2.jpg" alt="Giải pháp bảo tồn">
+    </div>
+  </div>
 </section>
 
 <section id="thuvien" class="gallery fade-in">
-  <h2>Thư viện ảnh</h2>
+  <h2>Thư viện ảnh Yên Tử</h2>
   <div class="gallery-slider glass">
     <div class="slides" id="slides">
-      <img src="anh1.jpg" alt="Pagoda trên núi">
-      <img src="anh2.jpg" alt="Tượng Phật tại Yên Tử">
+      <img src="anh1.jpg" alt="Chùa Đồng trên đỉnh Yên Tử">
+      <img src="anh2.jpg" alt="Tượng Phật hoàng Trần Nhân Tông">
       <img src="anh3.jpg" alt="Cáp treo Yên Tử">
       <img src="anh4.jpg" alt="Quần thể Hoa Yên">
+      <img src="anh5.jpg" alt="Chùa Một Mái">
     </div>
     <button class="slider-btn" id="prevBtn">⟨</button>
     <button class="slider-btn" id="nextBtn">⟩</button>
@@ -241,26 +710,12 @@
     <button data-index="1"></button>
     <button data-index="2"></button>
     <button data-index="3"></button>
-  </div>
-</section>
-
-<section id="thamquan" class="cards fade-in">
-  <div class="card glass">
-    <h3>Thiền viện Trúc Lâm</h3>
-    <p>Trung tâm tu học nổi tiếng, nơi kết nối tâm linh và thiên nhiên.</p>
-  </div>
-  <div class="card glass">
-    <h3>Đường lên chùa Đồng</h3>
-    <p>Trải nghiệm leo núi hoặc đi cáp treo để chiêm ngưỡng khung cảnh hùng vĩ.</p>
-  </div>
-  <div class="card glass">
-    <h3>Ẩm thực chay Yên Tử</h3>
-    <p>Những món ăn thanh tịnh giúp tâm an và cơ thể khỏe mạnh.</p>
+    <button data-index="4"></button>
   </div>
 </section>
 
 <footer class="glass fade-in">
-  <p>© <span id="year"></span> Yên Tử - Nơi Tâm Hồn Hướng Thiện</p>
+  <p>© <span id="year"></span> Trường THCS Đông Xá - Hành trình "Dấu ấn Đỉnh thiêng Yên Tử"</p>
 </footer>
 
 <button id="theme-toggle" title="Chuyển chế độ">🌙</button>
@@ -292,8 +747,8 @@
   slider.addEventListener('mouseleave',()=>auto=setInterval(()=>show(idx+1),5000));
   show(0);
 
-  // Fade-in on scroll
-  const faders=document.querySelectorAll('.fade-in');
+  // Fade-in on scroll for content blocks
+  const faders=document.querySelectorAll('.fade-in, .content-block');
   const obs=new IntersectionObserver(entries=>{
     entries.forEach(e=>{
       if(e.isIntersecting){
@@ -303,6 +758,35 @@
     });
   },{threshold:0.1});
   faders.forEach(f=>obs.observe(f));
+
+  // Particle background
+  function createParticles() {
+    const particlesContainer = document.getElementById('particles');
+    const particleCount = 30;
+    
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      
+      // Random properties
+      const size = Math.random() * 5 + 2;
+      const left = Math.random() * 100;
+      const animationDuration = Math.random() * 20 + 10;
+      const animationDelay = Math.random() * 5;
+      const opacity = Math.random() * 0.5 + 0.1;
+      
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.left = `${left}%`;
+      particle.style.animationDuration = `${animationDuration}s`;
+      particle.style.animationDelay = `${animationDelay}s`;
+      particle.style.opacity = opacity;
+      
+      particlesContainer.appendChild(particle);
+    }
+  }
+  
+  createParticles();
 </script>
 </body>
 </html>
