@@ -75,7 +75,14 @@
 
   h1 {font-size: 2rem; color: var(--primary);}
   h2 {color: var(--primary); margin-bottom: 1rem;}
-  p {line-height:1.6; margin-bottom: 1rem;}
+  
+  /* Căn chỉnh đoạn văn */
+  p {
+    line-height:1.6; 
+    margin-bottom: 1rem;
+    text-align: justify; /* Căn đều hai bên */
+    text-indent: 1.5em; /* Thụt đầu dòng */
+  }
 
   nav {
     display:flex;
@@ -379,6 +386,7 @@
     position: relative;
     padding-left: 20px;
     transition: all 0.3s ease;
+    text-align: justify; /* Căn đều hai bên cho danh sách */
   }
   
   .solution-list li::before {
@@ -789,4 +797,5 @@
   createParticles();
 </script>
 </body>
-</html>
+        </html>
+        
