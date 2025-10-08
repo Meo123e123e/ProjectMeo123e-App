@@ -43,6 +43,80 @@
     overflow: hidden;
   }
 
+  /* Video nền */
+  .video-background {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .video-background video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
+    object-fit: cover;
+  }
+  
+  .video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+  }
+  
+  .video-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: white;
+    padding: 2rem;
+    max-width: 800px;
+    animation: fadeInUp 1.5s ease-out;
+  }
+  
+  .video-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .video-content p {
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+    margin-bottom: 2rem;
+  }
+  
+  .video-content .btn {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  
+  .video-content .btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    background: #5ca5d0;
+  }
+
   /* Liquid shimmer */
   header::before, footer::before, .hero::before, .card::before, nav::before, .gallery-slider::before, .content-section::before {
     content: "";
@@ -533,6 +607,14 @@
     nav {
       flex-wrap: wrap;
     }
+    
+    .video-content h1 {
+      font-size: 2rem;
+    }
+    
+    .video-content p {
+      font-size: 1.2rem;
+    }
   }
 </style>
 </head>
@@ -540,10 +622,20 @@
 <!-- Particle Background -->
 <div class="particles" id="particles"></div>
 
-<header class="glass fade-in floating">
-  <h1>DẤU ẤN ĐỈNH THIÊNG YÊN TỬ</h1>
-  <p>Trường THCS Đông Xá - Hành trình trải nghiệm văn hóa và tâm linh</p>
-</header>
+<!-- Video Background Section -->
+<section class="video-background">
+  <video autoplay muted loop playsinline>
+    <!-- Thay thế URL này bằng video của bạn -->
+    <source src="https://assets.codepen.io/3364143/720p.mp4" type="video/mp4">
+    Trình duyệt của bạn không hỗ trợ video HTML5.
+  </video>
+  <div class="video-overlay"></div>
+  <div class="video-content">
+    <h1>DẤU ẤN ĐỈNH THIÊNG YÊN TỬ</h1>
+    <p>Trường THCS Đông Xá - Hành trình trải nghiệm văn hóa và tâm linh</p>
+    <a href="#gioithieu" class="btn">Khám phá ngay</a>
+  </div>
+</section>
 
 <nav class="glass fade-in">
   <a href="#gioithieu">Giới thiệu</a>
@@ -797,5 +889,4 @@
   createParticles();
 </script>
 </body>
-        </html>
-        
+  </html>
