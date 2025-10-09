@@ -1,0 +1,755 @@
+/* Biến toàn cục */
+:root {
+  --primary: #78b6d9;
+  --glass-bg: rgba(255,255,255,0.2);
+  --glass-border: rgba(255,255,255,0.3);
+  --text-light: #f4faff;
+  --text-dark: #1e2a35;
+  --blur: 20px;
+  --transition: all .6s ease;
+}
+
+[data-theme='dark'] {
+  --glass-bg: rgba(0,0,0,0.25);
+  --glass-border: rgba(255,255,255,0.1);
+  --text-light: #eaf4ff;
+  --text-dark: #eaf4ff;
+}
+
+/* Reset và cấu trúc cơ bản */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: linear-gradient(135deg, #b7e3f2 0%, #eaf9ff 100%);
+  color: var(--text-dark);
+  min-height: 100vh;
+  transition: var(--transition);
+  overflow-x: hidden;
+  font-size: 18px;
+}
+
+[data-theme='dark'] body {
+  background: linear-gradient(135deg, #0e1a22 0%, #1f3a45 100%);
+}
+
+/* Kiểu glassmorphism chung */
+header, footer, .hero, .card, .gallery-slider, nav, .glass, .content-section {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Header */
+header {
+  text-align: center;
+  padding: 1.5rem;
+  margin: 1rem;
+  animation: float 6s ease-in-out infinite;
+}
+
+h1 {
+  font-size: 2.8rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+header p {
+  font-size: 1.4rem;
+  color: var(--text-dark);
+}
+
+h2 {
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+  font-size: 2.2rem;
+}
+
+h3 {
+  font-size: 1.6rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+/* Hero section với video - ĐÃ CHỈNH SỬA OVERLAY */
+.hero {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  margin: 0;
+}
+
+.hero video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -1;
+  object-fit: cover;
+}
+
+/* Overlay với độ mờ tăng lên */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Giảm độ mờ để video rõ hơn */
+  z-index: 0;
+}
+
+.hero .overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  padding: 2rem;
+  max-width: 900px;
+  animation: fadeInUp 1.5s ease-out;
+  background: rgba(0, 0, 0, 0.6); /* Giảm độ mờ để video rõ hơn */
+  backdrop-filter: blur(2px); /* Thêm hiệu ứng blur nhẹ cho overlay */
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.hero h2 {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 2px 2px 12px rgba(0,0,0,0.8); /* Tăng độ đổ bóng */
+  animation: float 6s ease-in-out infinite;
+  color: white;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 1.8rem;
+  text-shadow: 1px 1px 8px rgba(0,0,0,0.8); /* Tăng độ đổ bóng */
+  margin-bottom: 2.5rem;
+  color: white;
+  line-height: 1.5;
+  max-width: 800px;
+}
+
+/* Nút CTA trong hero section */
+.hero .btn {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  background: var(--primary);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 1.3rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  border: 2px solid rgba(255,255,255,0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.hero .btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  background: #5ca5d0;
+  border-color: rgba(255,255,255,0.5);
+}
+
+/* Main content sections */
+main {
+  padding: 1.5rem;
+}
+
+section {
+  margin-bottom: 3rem;
+  padding: 2.5rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+section h2 {
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 0.8rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  font-size: 2.5rem;
+}
+
+section h2::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  animation: expandWidth 2s ease-out forwards;
+}
+
+section p {
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+  text-indent: 1.5em;
+  font-size: 1.1rem;
+}
+
+/* Layout nội dung và ảnh so le nhau */
+.content-block {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.content-block.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.content-block.reverse {
+  flex-direction: row-reverse;
+}
+
+.content-block .text-content {
+  flex: 1;
+  transition: transform 0.5s ease;
+}
+
+.content-block:hover .text-content {
+  transform: translateX(5px);
+}
+
+.content-block.reverse:hover .text-content {
+  transform: translateX(-5px);
+}
+
+.content-block .image-content {
+  flex: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: all 0.5s ease;
+  position: relative;
+}
+
+.content-block .image-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(120,182,217,0.2), transparent);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 1;
+}
+
+.content-block .image-content:hover::before {
+  opacity: 1;
+}
+
+.content-block .image-content img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.content-block .image-content:hover img {
+  transform: scale(1.05);
+}
+
+.content-block .image-content:hover {
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  transform: translateY(-5px);
+}
+
+/* Di tích items */
+.ditich-item {
+  margin-bottom: 2.5rem;
+  padding: 2rem;
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  transition: all 0.4s ease;
+}
+
+.ditich-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.ditich-item h3 {
+  color: var(--primary);
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  font-size: 1.8rem;
+}
+
+.ditich-item h3:hover {
+  transform: translateX(5px);
+}
+
+.ditich-item p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+/* Gallery */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.gallery img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.gallery img:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  margin: 1rem;
+  color: var(--text-dark);
+  animation: fadeInUp 1s ease-out;
+  font-size: 1.1rem;
+}
+
+/* Nút chuyển đổi theme */
+#theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--blur));
+  color: var(--text-dark);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.5s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  animation: pulse 2s infinite;
+}
+
+#theme-toggle:hover {
+  transform: rotate(180deg) scale(1.2);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+/* Progress Bar */
+.progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: transparent;
+  z-index: 1000;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--primary);
+  width: 0%;
+  transition: width 0.1s ease;
+}
+
+/* Back to Top Button */
+.back-to-top {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--blur));
+  color: var(--text-dark);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 999;
+  font-size: 1.5rem;
+}
+
+.back-to-top.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.back-to-top:hover {
+  transform: translateY(-5px);
+  background: var(--primary);
+  color: white;
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.lightbox.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-content {
+  max-width: 90%;
+  max-height: 90%;
+  position: relative;
+}
+
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2.5rem;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.3);
+  border: none;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.lightbox-nav:hover {
+  background: rgba(255,255,255,0.5);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox-prev {
+  left: 20px;
+}
+
+.lightbox-next {
+  right: 20px;
+}
+
+.lightbox-caption {
+  position: absolute;
+  bottom: -50px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  color: white;
+  padding: 0.8rem;
+  font-size: 1.3rem;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes expandWidth {
+  to { width: 100%; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Liquid shimmer effect */
+header::before, footer::before, .hero::before, section::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 0% 50%, rgba(255,255,255,0.15), transparent 70%);
+  animation: shimmer 12s linear infinite;
+  opacity: 0.4;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(0) translateY(0) rotate(0deg);}
+  50% { transform: translateX(10%) translateY(10%) rotate(10deg);}
+  100% { transform: translateX(0) translateY(0) rotate(0deg);}
+}
+
+/* Fade-in animation on scroll */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Navigation styles */
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  margin: 1rem;
+  animation: slideDown 1s ease-out;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--text-dark);
+  font-weight: 600;
+  position: relative;
+  transition: color .3s;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  overflow: hidden;
+  font-size: 1.1rem;
+}
+
+nav a::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: left 0.5s;
+}
+
+nav a:hover::before {
+  left: 100%;
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: width .3s;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+nav a:hover {
+  color: var(--primary);
+}
+
+nav a.active {
+  color: var(--primary);
+  background: rgba(120, 182, 217, 0.1);
+}
+
+/* Particle background */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.particle {
+  position: absolute;
+  background: rgba(120,182,217,0.3);
+  border-radius: 50%;
+  animation: particleFloat linear infinite;
+}
+
+@keyframes particleFloat {
+  to { transform: translateY(-100vh); }
+}
+
+/* Solution list styles */
+.solution-list {
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.solution-list li {
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 25px;
+  transition: all 0.3s ease;
+  text-align: justify;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.solution-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-weight: bold;
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.solution-list li:hover {
+  transform: translateX(5px);
+}
+
+.solution-list li:hover::before {
+  transform: scale(1.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+  
+  .hero h2 {
+    font-size: 2.5rem;
+  }
+  
+  .hero p {
+    font-size: 1.4rem;
+  }
+  
+  section {
+    padding: 1.5rem;
+  }
+  
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+  
+  .gallery img {
+    height: 160px;
+  }
+  
+  .content-block {
+    flex-direction: column;
+  }
+  
+  .content-block.reverse {
+    flex-direction: column;
+  }
+  
+  h1 {
+    font-size: 2.2rem;
+  }
+  
+  h2 {
+    font-size: 1.8rem;
+  }
+  
+  nav {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  nav a {
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+  }
+  
+  .hero .overlay {
+    padding: 1.5rem;
+  }
+}
