@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dấu Ấn Đỉnh Thiêng Yên Tử - Trường THCS Đông Xá</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     /* Reset và base styles */
     * {
@@ -12,12 +13,72 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --primary-color: #4a90e2;
+      --secondary-color: #7b4397;
+      --accent-color: #ff6b6b;
+      --text-color: #333;
+      --light-text: #f0f0f0;
+      --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      --dark-bg-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      --glass-bg: rgba(255, 255, 255, 0.25);
+      --dark-glass-bg: rgba(30, 30, 40, 0.7);
+      --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+      --transition: all 0.3s ease;
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       line-height: 1.6;
-      color: #333;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: var(--text-color);
+      background: var(--bg-gradient);
       min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Loading Screen */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-gradient);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    #loading-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .spinner {
+      width: 70px;
+      height: 70px;
+      border: 5px solid rgba(123, 67, 151, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--secondary-color);
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Particles Background */
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
     }
 
     /* Progress Bar */
@@ -33,7 +94,7 @@
 
     .progress-bar {
       height: 100%;
-      background: linear-gradient(to right, #4a90e2, #7b4397);
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
       width: 0%;
       transition: width 0.3s ease;
     }
@@ -54,8 +115,9 @@
       font-size: 24px;
       cursor: pointer;
       opacity: 0;
-      transition: opacity 0.3s, transform 0.3s;
+      transition: var(--transition);
       z-index: 999;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
 
     .back-to-top.show {
@@ -65,23 +127,105 @@
     .back-to-top:hover {
       transform: translateY(-5px);
       background: rgba(123, 67, 151, 1);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Navigation Menu */
+    .main-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 990;
+      padding: 1rem 0;
+      transition: var(--transition);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .main-nav.scrolled {
+      padding: 0.5rem 0;
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1rem;
+    }
+
+    .nav-logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--secondary-color);
+      text-decoration: none;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+    }
+
+    .nav-item {
+      margin-left: 2rem;
+    }
+
+    .nav-link {
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: var(--secondary-color);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--secondary-color);
+      transition: var(--transition);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--secondary-color);
     }
 
     /* Glassmorphism effect */
     .glass {
-      background: rgba(255, 255, 255, 0.25);
+      background: var(--glass-bg);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      border-radius: 10px;
+      border-radius: 15px;
       border: 1px solid rgba(255, 255, 255, 0.18);
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+      box-shadow: var(--shadow);
     }
 
     /* Animations */
     .fade-in {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
     }
 
     .fade-in.appear {
@@ -89,32 +233,84 @@
       transform: translateY(0);
     }
 
+    .slide-in-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .slide-in-left.appear {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .slide-in-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .slide-in-right.appear {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .zoom-in {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .zoom-in.appear {
+      opacity: 1;
+      transform: scale(1);
+    }
+
     /* Header */
     header {
       text-align: center;
       padding: 2rem;
       margin: 1rem;
-      margin-top: 2rem;
+      margin-top: 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(74, 144, 226, 0.1), rgba(123, 67, 151, 0.1));
+      z-index: -1;
+      border-radius: 15px;
     }
 
     header h1 {
       font-size: 2.5rem;
       color: #2c3e50;
       margin-bottom: 0.5rem;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
     header p {
       font-size: 1.2rem;
-      color: #7b4397;
+      color: var(--secondary-color);
     }
 
     /* Hero Section */
     .hero {
       position: relative;
-      height: 70vh;
+      height: 80vh;
       overflow: hidden;
       margin: 1rem;
-      border-radius: 10px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
     .hero video {
@@ -129,7 +325,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.5);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -140,31 +336,92 @@
     }
 
     .hero h2 {
-      font-size: 3rem;
+      font-size: 3.5rem;
       margin-bottom: 1rem;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      animation: fadeInDown 1s ease;
     }
 
     .hero p {
       font-size: 1.5rem;
       margin-bottom: 2rem;
       max-width: 800px;
+      animation: fadeInUp 1s ease 0.5s both;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .btn {
       display: inline-block;
       padding: 12px 30px;
-      background: linear-gradient(to right, #4a90e2, #7b4397);
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
       color: white;
       text-decoration: none;
       border-radius: 50px;
       font-weight: bold;
-      transition: transform 0.3s, box-shadow 0.3s;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 1s ease 1s both;
     }
 
     .btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn:active {
+      transform: translateY(-1px);
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+
+    .btn:focus:not(:active)::after {
+      animation: ripple 1s ease-out;
+    }
+
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(20, 20);
+        opacity: 0;
+      }
     }
 
     /* Main content sections */
@@ -175,35 +432,39 @@
     }
 
     section {
-      margin: 3rem 0;
-      padding: 2rem;
+      margin: 4rem 0;
+      padding: 2.5rem;
+      position: relative;
     }
 
     section h2 {
-      font-size: 2rem;
+      font-size: 2.2rem;
       color: #2c3e50;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
       text-align: center;
       position: relative;
+      padding-bottom: 1rem;
     }
 
     section h2::after {
       content: '';
       position: absolute;
-      bottom: -10px;
+      bottom: 0;
       left: 50%;
       transform: translateX(-50%);
       width: 100px;
-      height: 3px;
-      background: linear-gradient(to right, #4a90e2, #7b4397);
+      height: 4px;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      border-radius: 2px;
     }
 
     /* Content blocks */
     .content-block {
       display: flex;
       align-items: center;
-      margin-bottom: 3rem;
-      gap: 2rem;
+      margin-bottom: 4rem;
+      gap: 2.5rem;
+      position: relative;
     }
 
     .content-block.reverse {
@@ -215,52 +476,112 @@
     }
 
     .text-content h3 {
-      font-size: 1.5rem;
-      color: #7b4397;
-      margin-bottom: 1rem;
+      font-size: 1.7rem;
+      color: var(--secondary-color);
+      margin-bottom: 1.2rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .text-content h3::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--accent-color);
+      border-radius: 2px;
     }
 
     .text-content p {
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
       text-align: justify;
     }
 
     .image-content {
       flex: 1;
-      border-radius: 10px;
+      border-radius: 15px;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .image-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(74, 144, 226, 0.2), rgba(123, 67, 151, 0.2));
+      opacity: 0;
+      transition: var(--transition);
+      z-index: 1;
+    }
+
+    .image-content:hover::before {
+      opacity: 1;
     }
 
     .image-content img {
       width: 100%;
       height: auto;
       display: block;
-      transition: transform 0.5s;
+      transition: transform 0.8s ease;
     }
 
     .image-content:hover img {
-      transform: scale(1.05);
+      transform: scale(1.1);
     }
 
     /* Gallery */
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
     }
 
-    .gallery img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
+    .gallery-item {
+      position: relative;
       border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: var(--transition);
       cursor: pointer;
-      transition: transform 0.3s;
     }
 
-    .gallery img:hover {
-      transform: scale(1.05);
+    .gallery-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+      color: white;
+      transform: translateY(100%);
+      transition: var(--transition);
+    }
+
+    .gallery-item:hover .gallery-overlay {
+      transform: translateY(0);
     }
 
     /* Lightbox */
@@ -270,38 +591,54 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.9);
       display: none;
       justify-content: center;
       align-items: center;
       z-index: 2000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     .lightbox.active {
       display: flex;
+      opacity: 1;
     }
 
     .lightbox-content {
       position: relative;
       max-width: 90%;
       max-height: 90%;
+      transform: scale(0.8);
+      transition: transform 0.3s ease;
+    }
+
+    .lightbox.active .lightbox-content {
+      transform: scale(1);
     }
 
     .lightbox-content img {
       max-width: 100%;
       max-height: 80vh;
       border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
     .lightbox-close {
       position: absolute;
-      top: -40px;
+      top: -50px;
       right: 0;
       background: none;
       border: none;
       color: white;
-      font-size: 2rem;
+      font-size: 2.5rem;
       cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .lightbox-close:hover {
+      color: var(--accent-color);
+      transform: rotate(90deg);
     }
 
     .lightbox-nav {
@@ -312,21 +649,27 @@
       border: none;
       color: white;
       font-size: 2rem;
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
+      transition: var(--transition);
+    }
+
+    .lightbox-nav:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-50%) scale(1.1);
     }
 
     .lightbox-prev {
-      left: -70px;
+      left: -80px;
     }
 
     .lightbox-next {
-      right: -70px;
+      right: -80px;
     }
 
     .lightbox-caption {
@@ -342,9 +685,23 @@
     /* Footer */
     footer {
       text-align: center;
-      padding: 2rem;
+      padding: 2.5rem;
       margin: 1rem;
-      margin-top: 3rem;
+      margin-top: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(74, 144, 226, 0.1), rgba(123, 67, 151, 0.1));
+      z-index: -1;
+      border-radius: 15px;
     }
 
     /* Theme toggle */
@@ -360,43 +717,194 @@
       font-size: 1.5rem;
       cursor: pointer;
       z-index: 999;
-      transition: transform 0.3s;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
 
     #theme-toggle:hover {
       transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
 
     /* Dark mode */
     body.dark-mode {
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-      color: #f0f0f0;
+      background: var(--dark-bg-gradient);
+      color: var(--light-text);
     }
 
     body.dark-mode .glass {
-      background: rgba(30, 30, 40, 0.7);
-      color: #f0f0f0;
+      background: var(--dark-glass-bg);
+      color: var(--light-text);
     }
 
     body.dark-mode header h1,
     body.dark-mode section h2,
     body.dark-mode section h3 {
-      color: #f0f0f0;
+      color: var(--light-text);
     }
 
     body.dark-mode .text-content h3 {
       color: #a78bfa;
     }
 
+    body.dark-mode .main-nav {
+      background: rgba(30, 30, 40, 0.9);
+    }
+
+    body.dark-mode .nav-link {
+      color: var(--light-text);
+    }
+
+    body.dark-mode .nav-link:hover {
+      color: #a78bfa;
+    }
+
+    /* Floating elements */
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .floating-element {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: rgba(74, 144, 226, 0.1);
+      border-radius: 50%;
+      animation: float 15s infinite linear;
+    }
+
+    .floating-element:nth-child(1) {
+      top: 20%;
+      left: 10%;
+      animation-delay: 0s;
+      width: 60px;
+      height: 60px;
+    }
+
+    .floating-element:nth-child(2) {
+      top: 60%;
+      left: 80%;
+      animation-delay: 2s;
+      width: 30px;
+      height: 30px;
+    }
+
+    .floating-element:nth-child(3) {
+      top: 40%;
+      left: 70%;
+      animation-delay: 4s;
+      width: 50px;
+      height: 50px;
+    }
+
+    .floating-element:nth-child(4) {
+      top: 80%;
+      left: 20%;
+      animation-delay: 6s;
+      width: 40px;
+      height: 40px;
+    }
+
+    .floating-element:nth-child(5) {
+      top: 10%;
+      left: 50%;
+      animation-delay: 8s;
+      width: 70px;
+      height: 70px;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.7;
+      }
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(0) rotate(360deg);
+        opacity: 0.7;
+      }
+    }
+
+    /* Timeline for history section */
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .timeline::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      margin-left: -3px;
+      border-radius: 3px;
+    }
+
+    .timeline-item {
+      padding: 10px 40px;
+      position: relative;
+      width: 50%;
+      box-sizing: border-box;
+    }
+
+    .timeline-item:nth-child(odd) {
+      left: 0;
+    }
+
+    .timeline-item:nth-child(even) {
+      left: 50%;
+    }
+
+    .timeline-content {
+      padding: 20px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: var(--secondary-color);
+      border: 4px solid white;
+      border-radius: 50%;
+      top: 15px;
+      z-index: 1;
+    }
+
+    .timeline-item:nth-child(odd)::after {
+      right: -10px;
+    }
+
+    .timeline-item:nth-child(even)::after {
+      left: -10px;
+    }
+
     /* Responsive design */
-    @media (max-width: 768px) {
+    @media (max-width: 992px) {
       .content-block,
       .content-block.reverse {
         flex-direction: column;
       }
       
       .hero h2 {
-        font-size: 2rem;
+        font-size: 2.5rem;
       }
       
       .hero p {
@@ -408,25 +916,157 @@
       }
       
       section h2 {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
       }
       
       .gallery {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+
+      .timeline::after {
+        left: 31px;
+      }
+
+      .timeline-item {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 25px;
+      }
+
+      .timeline-item:nth-child(even) {
+        left: 0;
+      }
+
+      .timeline-item::after {
+        left: 21px;
+      }
+
+      .timeline-item:nth-child(odd)::after,
+      .timeline-item:nth-child(even)::after {
+        left: 21px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .nav-menu {
+        position: fixed;
+        top: 70px;
+        right: -100%;
+        flex-direction: column;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        width: 80%;
+        height: calc(100vh - 70px);
+        transition: var(--transition);
+        padding: 2rem;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-menu.active {
+        right: 0;
+      }
+
+      .nav-item {
+        margin: 1rem 0;
+      }
+
+      .lightbox-prev {
+        left: 10px;
+      }
+
+      .lightbox-next {
+        right: 10px;
+      }
+
+      .lightbox-nav {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+      }
+
+      .hero {
+        height: 60vh;
+      }
+    }
+
+    @media (max-width: 576px) {
+      section {
+        padding: 1.5rem;
+      }
+      
+      .hero h2 {
+        font-size: 2rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      .gallery {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 
 <body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="spinner"></div>
+    <p>Đang tải trang...</p>
+  </div>
+
+  <!-- Particles Background -->
+  <div id="particles-js"></div>
+
+  <!-- Floating Elements -->
+  <div class="floating-elements">
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+  </div>
+
   <!-- Progress Bar -->
   <div class="progress-container">
     <div class="progress-bar" id="progressBar"></div>
   </div>
 
+  <!-- Navigation Menu -->
+  <nav class="main-nav" id="mainNav">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">Yên Tử</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-menu" id="navMenu">
+        <li class="nav-item">
+          <a href="#gioithieu" class="nav-link">Giới thiệu</a>
+        </li>
+        <li class="nav-item">
+          <a href="#tongquan" class="nav-link">Tổng quan</a>
+        </li>
+        <li class="nav-item">
+          <a href="#giatri" class="nav-link">Giá trị</a>
+        </li>
+        <li class="nav-item">
+          <a href="#ditich" class="nav-link">Di tích</a>
+        </li>
+        <li class="nav-item">
+          <a href="#hoatdong" class="nav-link">Hoạt động</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
   <!-- Back to Top Button -->
   <div class="back-to-top" id="backToTop">
-    ↑
+    <i class="fas fa-chevron-up"></i>
   </div>
 
   <header class="glass fade-in">
@@ -469,7 +1109,7 @@
     <section id="tongquan" class="glass fade-in">
       <h2>TỔNG QUAN VỀ YÊN TỬ</h2>
       
-      <div class="content-block">
+      <div class="content-block slide-in-left">
         <div class="text-content">
           <h3>NGUỒN GỐC TÊN GỌI</h3>
           <p>Từ bao đời nay, tên gọi Yên Tử đã trở thành biểu tượng thiêng liêng gắn liền với lịch sử, văn hóa và tâm linh của dân tộc Việt Nam. Theo truyền thuyết dân gian, tên gọi này bắt nguồn từ đạo sĩ An Kỳ Sinh người đã đến ngọn núi này để tu tiên, luyện đan và sau đó hóa đá. Người đời sau tôn kính gọi ông là "An Tử", tên núi nơi ông tu hành cũng được gọi tên là "An Tử" và dần dần qua thời gian cùng sự biến đổi trong cách phát âm, tên núi cũng được gọi thành "Yên Tử" như ngày nay.</p>
@@ -480,7 +1120,7 @@
         </div>
       </div>
 
-      <div class="content-block reverse">
+      <div class="content-block reverse slide-in-right">
         <div class="text-content">
           <h3>LỊCH SỬ HÌNH THÀNH</h3>
           <p>Từ xa xưa, núi Yên Tử đã được các nhà địa lý cổ phương Đông xem là một trong những phúc địa của Giao Châu, nơi tích tụ linh khí sông núi, trời đất giao hòa, giúp con người dễ dàng thoát tục để đến với không gian thanh tịnh, an nhiên, rời xa bụi trần thế tục. Trước thế kỷ XIII, nơi đây đã có các thiền sư tu hành, hình thành truyền thống Phật giáo sớm.</p>
@@ -492,7 +1132,7 @@
         </div>
       </div>
 
-      <div class="content-block">
+      <div class="content-block slide-in-left">
         <div class="text-content">
           <h3>VỊ TRÍ ĐỊA LÝ, CÔNG TRÌNH KIẾN TRÚC</h3>
           <p>Núi Yên Tử nằm trong dãy Yên Tử - Bảo Đài, thuộc hệ cánh cung Đông Triều, tọa lạc ở phường Yên Tử tỉnh Quảng Ninh, là vùng đất đặc biệt nơi giao hòa giữa núi rừng, mây trời và linh khí đất trời. Với độ cao 1.068 mét so với mực nước biển.</p>
@@ -510,7 +1150,7 @@
     <section id="giatri" class="glass fade-in">
       <h2>GIÁ TRỊ CỦA YÊN TỬ</h2>
       
-      <div class="content-block">
+      <div class="content-block zoom-in">
         <div class="text-content">
           <h3>GIÁ TRỊ LỊCH SỬ</h3>
           <p>Với sự kiện Phật hoàng Trần Nhân Tông - vị minh quân hai lần lãnh đạo quân dân Đại Việt đánh tan giặc Nguyên Mông xâm lược - Yên Tử trở thành biểu tượng thiêng liêng của ý chí độc lập, tự cường và tinh thần giác ngộ. Sau khi hoàn thành trọng trách với non sông, Người đã chọn nơi đây để xuất gia tu hành, sáng lập Thiền phái Trúc Lâm - dòng thiền mang đậm bản sắc Việt, kết tinh giữa tư tưởng Phật giáo và truyền thống yêu nước, nhân nghĩa của dân tộc.</p>
@@ -522,7 +1162,7 @@
         </div>
       </div>
 
-      <div class="content-block reverse">
+      <div class="content-block reverse zoom-in">
         <div class="text-content">
           <h3>GIÁ TRỊ VĂN HÓA - TÂM LINH</h3>
           <p>Không chỉ mang giá trị lịch sử to lớn, Yên Tử còn là trung tâm văn hóa - tâm linh đặc sắc, nơi hội tụ và lan tỏa những giá trị tinh thần bền vững của dân tộc Việt Nam. Trải qua hơn bảy thế kỷ, tư tưởng Thiền phái Trúc Lâm Yên Tử vẫn soi sáng đời sống tinh thần của người Việt bằng triết lý "hòa quang đồng trần" - sống giữa đời mà vẫn giữ tâm thanh tịnh, hướng thiện.</p>
@@ -560,7 +1200,7 @@
     <section id="ditich" class="glass fade-in">
       <h2>CÁC CÔNG TRÌNH VÀ DI TÍCH TIÊU BIỂU TẠI YÊN TỬ</h2>
 
-      <div class="content-block">
+      <div class="content-block slide-in-left">
         <div class="text-content">
           <h3>Am Ngự Dược</h3>
           <p>Những công trình thể hiện tinh thần thiền định và sự hòa hợp với thiên nhiên.</p>
@@ -570,7 +1210,7 @@
         </div>
       </div>
 
-      <div class="content-block reverse">
+      <div class="content-block reverse slide-in-right">
         <div class="text-content">
           <h3>Chùa Bảo Sái</h3>
           <p>Linh thiêng lưu mãi dấu ấn Thiền.</p>
@@ -580,7 +1220,7 @@
         </div>
       </div>
 
-      <div class="content-block">
+      <div class="content-block slide-in-left">
         <div class="text-content">
           <h3>Chùa Đồng</h3>
           <p>Công trình bằng đồng nguyên chất lớn nhất Việt Nam, biểu tượng cho đức tin và lòng hướng thiện.</p>
@@ -590,16 +1230,16 @@
         </div>
       </div>
 
-      <div class="content-block reverse">
+      <div class="content-block reverse slide-in-right">
         <div class="text-content">
-          <h3>Phật Tử đang thắp hương Yên Tử </h3>
+          <h3>Yên Tử – mountain footstepsindochina.asia</h3>
         </div>
         <div class="image-content">
           <img src="anh19.jpg" alt="Yên Tử Mountain Footsteps">
         </div>
       </div>
 
-      <div class="content-block">
+      <div class="content-block slide-in-left">
         <div class="text-content">
           <h3>Chùa Giải Oan</h3>
           <p>Gắn liền với truyền thuyết vua Trần Nhân Tông xuất gia tu hành tại Yên Tử, nơi các cung tần mỹ nữ vì thương nhớ mà trầm mình xuống suối để cầu xin Ngài trở lại triều đình.</p>
@@ -609,7 +1249,7 @@
         </div>
       </div>
 
-      <div class="content-block reverse">
+      <div class="content-block reverse slide-in-right">
         <div class="text-content">
           <h3>Chùa Hoa Yên</h3>
           <p>Là ngôi chùa to và đẹp nhất trong khu di tích danh thắng Yên Tử. Đây là nơi đức vua Trần Nhân Tông đã xuất gia và sau đó lập ra Thiền phái riêng mà ngày nay mọi người vẫn gọi là Thiền phái Trúc Lâm.</p>
@@ -619,7 +1259,7 @@
         </div>
       </div>
 
-      <div class="content-block">
+      <div class="content-block slide-in-left">
         <div class="text-content">
           <h3>Chùa Lân (Long Động Tự)</h3>
           <p>Một trong những địa điểm quan trọng của Thiền phái Trúc Lâm nơi Vua Trần Nhân Tông từng giảng pháp và xây dựng Viện Kỳ Lân.</p>
@@ -629,7 +1269,7 @@
         </div>
       </div>
 
-      <div class="content-block reverse">
+      <div class="content-block reverse slide-in-right">
         <div class="text-content">
           <h3>Chùa Một Mái</h3>
           <p>Một trong những ngôi chùa đặc biệt của vùng non thiêng Yên Tử.</p>
@@ -639,7 +1279,7 @@
         </div>
       </div>
 
-      <div class="content-block">
+      <div class="content-block slide-in-left">
         <div class="text-content">
           <h3>Chùa Trình</h3>
           <p>Tọa lạc tại khu Bí Thượng là ngôi chùa ở cửa ngõ Yên Tử.</p>
@@ -655,11 +1295,36 @@
       <h2>HOẠT ĐỘNG TRẢI NGHIỆM CỦA HỌC SINH TRƯỜNG THCS ĐÔNG XÁ TẠI YÊN TỬ</h2>
 
       <div class="gallery">
-        <img src="anh6.jpg" alt="Hoạt động 1">
-        <img src="anh7.jpg" alt="Hoạt động 2">
-        <img src="anh8.jpg" alt="Hoạt động 3">
-        <img src="anh9.jpg" alt="Hoạt động 4">
-        <img src="anh10.jpg" alt="Hoạt động 5">
+        <div class="gallery-item">
+          <img src="anh6.jpg" alt="Hoạt động 1">
+          <div class="gallery-overlay">
+            <p>Hoạt động 1</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="anh7.jpg" alt="Hoạt động 2">
+          <div class="gallery-overlay">
+            <p>Hoạt động 2</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="anh8.jpg" alt="Hoạt động 3">
+          <div class="gallery-overlay">
+            <p>Hoạt động 3</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="anh9.jpg" alt="Hoạt động 4">
+          <div class="gallery-overlay">
+            <p>Hoạt động 4</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="anh10.jpg" alt="Hoạt động 5">
+          <div class="gallery-overlay">
+            <p>Hoạt động 5</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -668,11 +1333,36 @@
       <h2>HÌNH ẢNH NHÀ TRƯỜNG ĐÔNG XÁ</h2>
 
       <div class="gallery">
-        <img src="anh1.jpg" alt="Trường Đông Xá 1">
-        <img src="anh2.jpg" alt="Trường Đông Xá 2">
-        <img src="anh3.jpg" alt="Trường Đông Xá 3">
-        <img src="anh4.jpg" alt="Trường Đông Xá 4">
-        <img src="anh5.jpg" alt="Trường Đông Xá 5">
+        <div class="gallery-item">
+          <img src="anh1.jpg" alt="Trường Đông Xá 1">
+          <div class="gallery-overlay">
+            <p>Trường Đông Xá 1</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="anh2.jpg" alt="Trường Đông Xá 2">
+          <div class="gallery-overlay">
+            <p>Trường Đông Xá 2</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="anh3.jpg" alt="Trường Đông Xá 3">
+          <div class="gallery-overlay">
+            <p>Trường Đông Xá 3</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="anh4.jpg" alt="Trường Đông Xá 4">
+          <div class="gallery-overlay">
+            <p>Trường Đông Xá 4</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="anh5.jpg" alt="Trường Đông Xá 5">
+          <div class="gallery-overlay">
+            <p>Trường Đông Xá 5</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -681,7 +1371,7 @@
       <h2>TƯỢNG PHẬT HOÀNG TRẦN NHÂN TÔNG</h2>
       <p>Tượng bằng đồng cao 12,6m – công trình tôn vinh vị vua anh minh, vị tổ sáng lập Thiền phái Trúc Lâm.</p>
       
-      <div class="content-block">
+      <div class="content-block zoom-in">
         <div class="text-content">
           <h3>DI SẢN VĂN HÓA TÂM LINH</h3>
           <p>Tượng Phật hoàng Trần Nhân Tông không chỉ là một tác phẩm nghệ thuật mà còn là biểu tượng của tinh thần dân tộc, sự kết hợp hài hòa giữa Phật giáo và văn hóa Việt Nam.</p>
@@ -711,9 +1401,53 @@
 
   <button id="theme-toggle" title="Chuyển chế độ">🌙</button>
 
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
     // Set current year in footer
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Loading Screen
+    window.addEventListener('load', function() {
+      const loadingScreen = document.getElementById('loading-screen');
+      setTimeout(() => {
+        loadingScreen.classList.add('hidden');
+      }, 1000);
+    });
+
+    // Particles.js Background
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 80, density: { enable: true, value_area: 800 } },
+        color: { value: "#7b4397" },
+        shape: { type: "circle" },
+        opacity: { value: 0.5, random: true },
+        size: { value: 3, random: true },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#4a90e2",
+          opacity: 0.4,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 2,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out",
+          bounce: false
+        }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: true, mode: "push" },
+          resize: true
+        }
+      }
+    });
 
     // Progress Bar
     window.onscroll = function() {
@@ -741,8 +1475,52 @@
       });
     });
 
-    // Fade in animation
-    const fadeElements = document.querySelectorAll('.fade-in');
+    // Navigation Menu Scroll Effect
+    const mainNav = document.getElementById('mainNav');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 100) {
+        mainNav.classList.add('scrolled');
+      } else {
+        mainNav.classList.remove('scrolled');
+      }
+    });
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navMenu = document.getElementById('navMenu');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+      mobileMenuBtn.innerHTML = navMenu.classList.contains('active') ? 
+        '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+    });
+
+    // Smooth Scrolling for Navigation Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        if (navMenu.classList.contains('active')) {
+          navMenu.classList.remove('active');
+          mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        }
+        
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // Scroll Animations
+    const fadeElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .zoom-in');
     
     const appearOptions = {
       threshold: 0.15,
@@ -770,6 +1548,80 @@
     themeToggle.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
       themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+      
+      // Update particles color based on theme
+      if (document.body.classList.contains('dark-mode')) {
+        particlesJS('particles-js', {
+          particles: {
+            number: { value: 80, density: { enable: true, value_area: 800 } },
+            color: { value: "#a78bfa" },
+            shape: { type: "circle" },
+            opacity: { value: 0.5, random: true },
+            size: { value: 3, random: true },
+            line_linked: {
+              enable: true,
+              distance: 150,
+              color: "#4a90e2",
+              opacity: 0.4,
+              width: 1
+            },
+            move: {
+              enable: true,
+              speed: 2,
+              direction: "none",
+              random: true,
+              straight: false,
+              out_mode: "out",
+              bounce: false
+            }
+          }
+        });
+      } else {
+        particlesJS('particles-js', {
+          particles: {
+            number: { value: 80, density: { enable: true, value_area: 800 } },
+            color: { value: "#7b4397" },
+            shape: { type: "circle" },
+            opacity: { value: 0.5, random: true },
+            size: { value: 3, random: true },
+            line_linked: {
+              enable: true,
+              distance: 150,
+              color: "#4a90e2",
+              opacity: 0.4,
+              width: 1
+            },
+            move: {
+              enable: true,
+              speed: 2,
+              direction: "none",
+              random: true,
+              straight: false,
+              out_mode: "out",
+              bounce: false
+            }
+          }
+        });
+      }
+    });
+
+    // Ripple Effect for Buttons
+    document.querySelectorAll('.btn').forEach(button => {
+      button.addEventListener('click', function(e) {
+        const x = e.clientX - e.target.getBoundingClientRect().left;
+        const y = e.clientY - e.target.getBoundingClientRect().top;
+        
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        
+        this.appendChild(ripple);
+        
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
     });
 
     // Lightbox functionality
@@ -784,7 +1636,7 @@
     let images = [];
     
     // Get all gallery images
-    document.querySelectorAll('.gallery img').forEach(img => {
+    document.querySelectorAll('.gallery-item img').forEach(img => {
       images.push({
         src: img.getAttribute('src'),
         alt: img.getAttribute('alt')
@@ -792,7 +1644,7 @@
     });
     
     // Add click event to gallery images
-    document.querySelectorAll('.gallery img').forEach((img, index) => {
+    document.querySelectorAll('.gallery-item img').forEach((img, index) => {
       img.addEventListener('click', () => {
         currentImageIndex = index;
         openLightbox();
@@ -843,6 +1695,37 @@
     lightbox.addEventListener('click', (e) => {
       if (e.target === lightbox) closeLightbox();
     });
+
+    // Parallax Effect for Hero Section
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const hero = document.querySelector('.hero');
+      if (hero) {
+        hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+      }
+    });
+
+    // Text Typing Effect for Hero Section
+    const heroTitle = document.querySelector('.hero h2');
+    const heroText = "DẤU ẤN ĐỈNH THIÊNG YÊN TỬ";
+    
+    if (heroTitle) {
+      let i = 0;
+      const typeWriter = () => {
+        if (i < heroText.length) {
+          heroTitle.innerHTML = heroText.substring(0, i+1) + '<span class="blinking-cursor">|</span>';
+          i++;
+          setTimeout(typeWriter, 100);
+        } else {
+          heroTitle.innerHTML = heroText;
+        }
+      };
+      
+      // Start typing effect after page loads
+      window.addEventListener('load', () => {
+        setTimeout(typeWriter, 1000);
+      });
+    }
   </script>
 </body>
 </html>
