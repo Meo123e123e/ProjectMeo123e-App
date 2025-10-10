@@ -4,8 +4,418 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dấu Ấn Đỉnh Thiêng Yên Tử - Trường THCS Đông Xá</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+  <style>
+    /* Reset và base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      z-index: 1000;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(to right, #4a90e2, #7b4397);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: rgba(123, 67, 151, 0.8);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 999;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      background: rgba(123, 67, 151, 1);
+    }
+
+    /* Glassmorphism effect */
+    .glass {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+    }
+
+    /* Animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.appear {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 2rem;
+      margin: 1rem;
+      margin-top: 2rem;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      color: #7b4397;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      height: 70vh;
+      overflow: hidden;
+      margin: 1rem;
+      border-radius: 10px;
+    }
+
+    .hero video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .hero h2 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      max-width: 800px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background: linear-gradient(to right, #4a90e2, #7b4397);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Main content sections */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    section {
+      margin: 3rem 0;
+      padding: 2rem;
+    }
+
+    section h2 {
+      font-size: 2rem;
+      color: #2c3e50;
+      margin-bottom: 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    section h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(to right, #4a90e2, #7b4397);
+    }
+
+    /* Content blocks */
+    .content-block {
+      display: flex;
+      align-items: center;
+      margin-bottom: 3rem;
+      gap: 2rem;
+    }
+
+    .content-block.reverse {
+      flex-direction: row-reverse;
+    }
+
+    .text-content {
+      flex: 1;
+    }
+
+    .text-content h3 {
+      font-size: 1.5rem;
+      color: #7b4397;
+      margin-bottom: 1rem;
+    }
+
+    .text-content p {
+      margin-bottom: 1rem;
+      text-align: justify;
+    }
+
+    .image-content {
+      flex: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .image-content img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.5s;
+    }
+
+    .image-content:hover img {
+      transform: scale(1.05);
+    }
+
+    /* Gallery */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: 90%;
+      max-height: 90%;
+    }
+
+    .lightbox-content img {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: 10px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 2rem;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox-prev {
+      left: -70px;
+    }
+
+    .lightbox-next {
+      right: -70px;
+    }
+
+    .lightbox-caption {
+      position: absolute;
+      bottom: -40px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      margin: 1rem;
+      margin-top: 3rem;
+    }
+
+    /* Theme toggle */
+    #theme-toggle {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(74, 144, 226, 0.8);
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 999;
+      transition: transform 0.3s;
+    }
+
+    #theme-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    /* Dark mode */
+    body.dark-mode {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: #f0f0f0;
+    }
+
+    body.dark-mode .glass {
+      background: rgba(30, 30, 40, 0.7);
+      color: #f0f0f0;
+    }
+
+    body.dark-mode header h1,
+    body.dark-mode section h2,
+    body.dark-mode section h3 {
+      color: #f0f0f0;
+    }
+
+    body.dark-mode .text-content h3 {
+      color: #a78bfa;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .content-block,
+      .content-block.reverse {
+        flex-direction: column;
+      }
+      
+      .hero h2 {
+        font-size: 2rem;
+      }
+      
+      .hero p {
+        font-size: 1.2rem;
+      }
+      
+      header h1 {
+        font-size: 2rem;
+      }
+      
+      section h2 {
+        font-size: 1.5rem;
+      }
+      
+      .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -30,264 +440,256 @@
       Trình duyệt của bạn không hỗ trợ video HTML5.
     </video>
     <div class="overlay">
-      <h2>Giới thiệu</h2>
-      <p>Hành trình của học sinh Trường THCS Đông Xá tìm hiểu và trải nghiệm tại vùng đất thiêng Yên Tử, nơi hội tụ giá trị văn hóa, lịch sử và tâm linh của dân tộc Việt Nam.</p>
+      <h2>DẤU ẤN ĐỈNH THIÊNG YÊN TỬ</h2>
+      <p>Trường THCS Đông Xá - Hành trình trải nghiệm văn hóa và tâm linh</p>
+      <a href="#gioithieu-chitiet" class="btn">Khám phá ngay</a>
     </div>
   </section>
 
   <main>
-    <section id="gioithieu-truong" class="glass fade-in">
-      <h2>Trường THCS Đông Xá</h2>
-      
-      <div class="content-block">
-        <div class="text-content">
-          <p>Từ vùng đất đảo Vân Đồn giàu truyền thống hiếu học, Trường THCS Đông Xá vươn lên như một điểm sáng của giáo dục địa phương. Dưới mái trường thân thương ấy, bao thế hệ học sinh đã được nuôi dưỡng tình yêu quê hương, ý chí học tập và khát vọng vươn xa.</p>
-          <p>Với phương châm "Mỗi ngày đến trường là một ngày vui", nhà trường không chỉ chú trọng trang bị tri thức mà còn quan tâm bồi dưỡng kỹ năng, nhân cách và niềm tự hào về quê hương, đất nước cho các em học sinh.</p>
-        </div>
-        <div class="image-content">
-          <img src="anh1.jpg" alt="Trường THCS Đông Xá">
-        </div>
-      </div>
-      
-      <div class="content-block reverse">
-        <div class="text-content">
-          <p>Mỗi chuyến trải nghiệm, mỗi giờ học thực tế không chỉ là bài học về tri thức, mà còn là hành trình gieo mầm nhân ái, giúp các em thêm tự hào về quê hương và thêm yêu mái trường Đông Xá thân yêu.</p>
-          <p>Khối 9 với những học sinh cuối cấp đầy năng động và khát vọng là lực lượng nòng cốt trong các phong trào học tập, rèn luyện và trải nghiệm sáng tạo. Các em luôn thể hiện tinh thần chủ động, tự tin trong học tập, tham gia tích cực vào các chương trình ngoại khóa và hoạt động hướng nghiệp mà nhà trường tổ chức.</p>
-        </div>
-        <div class="image-content">
-          <img src="anh2.jpg" alt="Học sinh trải nghiệm">
-        </div>
-      </div>
-      
-      <div class="content-block">
-        <div class="text-content">
-          <p>Và hành trình "Dấu ấn Đỉnh thiêng Yên Tử" chính là một dấu mốc đáng nhớ - nơi các em được hòa mình vào không gian văn hóa - tâm linh linh thiêng, được học từ thực tế, cảm từ trái tim và trưởng thành hơn trên bước đường tương lai.</p>
-        </div>
-        <div class="image-content">
-          <img src="anh3.jpg" alt="Cáp treo Yên Tử">
-        </div>
+    <!-- Phần giới thiệu chi tiết -->
+    <section id="gioithieu-chitiet" class="glass fade-in">
+      <h2>GIỚI THIỆU</h2>
+      <div class="text-content">
+        <p>Từ vùng đất đảo Vân Đồn giàu truyền thống hiếu học, Trường THCS Đông Xá vươn lên như một điểm sáng của giáo dục địa phương. Dưới mái trường thân thương ấy, bao thế hệ học sinh đã được nuôi dưỡng tình yêu quê hương, ý chí học tập và khát vọng vươn xa. Ngôi trường giàu truyền thống hiếu học này luôn nỗ lực đổi mới, sáng tạo trong từng hoạt động dạy học và giáo dục học sinh.</p>
+        
+        <p>Với phương châm "Mỗi ngày đến trường là một ngày vui", nhà trường không chỉ chú trọng trang bị tri thức mà còn quan tâm bồi dưỡng kỹ năng, nhân cách và niềm tự hào về quê hương, đất nước cho các em học sinh.</p>
+        
+        <p>Mỗi chuyến trải nghiệm, mỗi giờ học thực tế không chỉ là bài học về tri thức, mà còn là hành trình gieo mầm nhân ái, giúp các em thêm tự hào về quê hương và thêm yêu mái trường Đông Xá thân yêu.</p>
+        
+        <p>Khối 9 với những học sinh cuối cấp đầy năng động và khát vọng là lực lượng nòng cốt trong các phong trào học tập, rèn luyện và trải nghiệm sáng tạo. Các em luôn thể hiện tinh thần chủ động, tự tin trong học tập, tham gia tích cực vào các chương trình ngoại khóa và hoạt động hướng nghiệp mà nhà trường tổ chức.</p>
+        
+        <p>Trong những năm gần đây, Trường THCS Đông Xá đã triển khai nhiều hoạt động trải nghiệm - hướng nghiệp phong phú, mang lại hiệu quả thiết thực. Như hoạt động trải nghiệm ngoại khóa liên môn Ngữ văn - Lịch sử - Nghệ thuật tại đền thờ vua Lý Anh Tông ở khu 9 cảng Cái Rồng, Vân Đồn. Giúp học sinh kết nối kiến thức sách vở với thực tế, cảm nhận sâu sắc hơn về văn hóa, lịch sử quê hương qua hình thức sân khấu hóa, trình diễn nghệ thuật.</p>
+        
+        <p>Những trải nghiệm đó không chỉ làm giàu hành trang tri thức mà còn giúp học sinh Đông Xá thêm yêu quê hương, thêm gắn bó với mái trường thân thương. Và hành trình "Dấu ấn Đỉnh thiêng Yên Tử" chính là một dấu mốc đáng nhớ - nơi các em được hòa mình vào không gian văn hóa - tâm linh linh thiêng, được học từ thực tế, cảm từ trái tim và trưởng thành hơn trên bước đường tương lai.</p>
       </div>
     </section>
 
+    <!-- Phần tổng quan về Yên Tử -->
     <section id="tongquan" class="glass fade-in">
-      <h2>Tổng quan về Yên Tử</h2>
+      <h2>TỔNG QUAN VỀ YÊN TỬ</h2>
       
       <div class="content-block">
         <div class="text-content">
-          <h3>Nguồn gốc tên gọi</h3>
-          <p>Từ bao đời nay, tên gọi Yên Tử đã trở thành biểu tượng thiêng liêng gắn liền với lịch sử, văn hóa và tâm linh của dân tộc Việt Nam. Theo truyền thuyết dân gian, tên gọi này bắt nguồn từ đạo sĩ An Kỳ Sinh người đã đến ngọn núi này để tu tiên, luyện đan và sau đó hóa đá.</p>
-          <p>Không chỉ mang ý nghĩa huyền thoại, trong các ghi chép chính thống, Yên Tử còn được xem là một "phúc địa" linh thiêng của vùng Giao Châu xưa nơi hội tụ linh khí sông núi, trời đất giao hòa. Từ mảnh đất thiêng ấy, dòng thiền Trúc Lâm Yên Tử ra đời, kết hợp giữa "Trúc Lâm" biểu trưng cho rừng trúc thanh tịnh trong đạo Phật và "Yên Tử" nơi dòng thiền được sáng lập và phát triển.</p>
+          <h3>NGUỒN GỐC TÊN GỌI</h3>
+          <p>Từ bao đời nay, tên gọi Yên Tử đã trở thành biểu tượng thiêng liêng gắn liền với lịch sử, văn hóa và tâm linh của dân tộc Việt Nam. Theo truyền thuyết dân gian, tên gọi này bắt nguồn từ đạo sĩ An Kỳ Sinh người đã đến ngọn núi này để tu tiên, luyện đan và sau đó hóa đá. Người đời sau tôn kính gọi ông là "An Tử", tên núi nơi ông tu hành cũng được gọi tên là "An Tử" và dần dần qua thời gian cùng sự biến đổi trong cách phát âm, tên núi cũng được gọi thành "Yên Tử" như ngày nay.</p>
+          <p>Không chỉ mang ý nghĩa huyền thoại, trong các ghi chép chính thống, Yên Tử còn được xem là một "phúc địa" linh thiêng của vùng Giao Châu xưa nơi hội tụ linh khí sông núi, trời đất giao hòa. Từ mảnh đất thiêng ấy, dòng thiền Trúc Lâm Yên Tử ra đời, kết hợp giữa "Trúc Lâm" biểu trưng cho rừng trúc thanh tịnh trong đạo Phật và "Yên Tử" nơi dòng thiền được sáng lập và phát triển. "Trúc Lâm" cũng chính là pháp hiệu của Phật hoàng Trần Nhân Tông, vị vua anh minh đã hòa nhập tinh thần thiền với thiên nhiên Yên Tử, hình thành nên một dòng thiền thuần Việt, đậm đà bản sắc dân tộc.</p>
         </div>
         <div class="image-content">
-          <img src="anh4.jpg" alt="Nguồn gốc tên gọi Yên Tử">
+          <img src="anh19.jpg" alt="Phật tử thắp hương ở Yên Tử ">
         </div>
       </div>
-      
+
       <div class="content-block reverse">
         <div class="text-content">
-          <h3>Lịch sử hình thành</h3>
-          <p>Từ xa xưa, núi Yên Tử đã được các nhà địa lý cổ phương Đông xem là một trong những phúc địa của Giao Châu, nơi tích tụ linh khí sông núi, trời đất giao hòa, giúp con người dễ dàng thoát tục để đến với không gian thanh tịnh, an nhiên.</p>
-          <p>Năm 1299, sau khi nhường ngôi cho con, vua Trần Nhân Tông - vị vua anh minh hai lần lãnh đạo dân tộc đánh thắng giặc Nguyên Mông đã lên Yên Tử xuất gia, sáng lập Thiền phái Trúc Lâm - dòng thiền thuần Việt đầu tiên, kết tinh tinh thần nhập thế và yêu nước.</p>
+          <h3>LỊCH SỬ HÌNH THÀNH</h3>
+          <p>Từ xa xưa, núi Yên Tử đã được các nhà địa lý cổ phương Đông xem là một trong những phúc địa của Giao Châu, nơi tích tụ linh khí sông núi, trời đất giao hòa, giúp con người dễ dàng thoát tục để đến với không gian thanh tịnh, an nhiên, rời xa bụi trần thế tục. Trước thế kỷ XIII, nơi đây đã có các thiền sư tu hành, hình thành truyền thống Phật giáo sớm.</p>
+          <p>Năm 1299, sau khi nhường ngôi cho con, vua Trần Nhân Tông - vị vua anh minh hai lần lãnh đạo dân tộc đánh thắng giặc Nguyên Mông đã lên Yên Tử xuất gia, sáng lập Thiền phái Trúc Lâm - dòng thiền thuần Việt đầu tiên, kết tinh tinh thần nhập thế và yêu nước. Dưới thời Trần, Trúc Lâm phát triển rực rỡ với hệ thống chùa, tháp, am, tượng và nhiều tác phẩm văn học, triết lý thiền học.</p>
+          <p>Trải qua các triều đại sau, Yên Tử vẫn được trùng tu, tôn tạo, trở thành trung tâm Phật giáo và điểm hành hương linh thiêng của cả nước. Ngày 12/7/2025, Quần thể di tích và danh thắng Yên Tử - Vĩnh Nghiêm - Côn Sơn, Kiếp Bạc chính thức được UNESCO công nhận là Di sản Văn hóa Thế giới, là Di sản thứ 9 của Việt Nam và là di sản liên tỉnh đầu tiên ghi dấu giá trị to lớn về lịch sử, văn hóa và tâm linh Việt Nam.</p>
         </div>
         <div class="image-content">
-          <img src="anh5.jpg" alt="Lịch sử Yên Tử">
+          <img src="anh20.jpg" alt="Tượng Phật hoàng Trần Nhân Tông">
         </div>
       </div>
-      
+
       <div class="content-block">
         <div class="text-content">
-          <h3>Vị trí địa lý, công trình kiến trúc</h3>
+          <h3>VỊ TRÍ ĐỊA LÝ, CÔNG TRÌNH KIẾN TRÚC</h3>
           <p>Núi Yên Tử nằm trong dãy Yên Tử - Bảo Đài, thuộc hệ cánh cung Đông Triều, tọa lạc ở phường Yên Tử tỉnh Quảng Ninh, là vùng đất đặc biệt nơi giao hòa giữa núi rừng, mây trời và linh khí đất trời. Với độ cao 1.068 mét so với mực nước biển.</p>
           <p>Hành trình hành hương lên đỉnh núi là một chuỗi những di tích gắn bó chặt chẽ với nhau: từ Chùa Trình (Bí Thượng) - điểm khởi đầu của hành trình; Chùa Lân (Long Động) - nơi Phật hoàng từng giảng pháp; Chùa Giải Oan - gắn với truyền thuyết các cung phi bỏ mình để khuyên nhà vua trở lại; Chùa Hoa Yên - trung tâm tu học lớn nhất của Thiền phái, nằm ở độ cao khoảng 534m; đến Chùa Một Mái, Chùa Bảo Sái, Am Ngự Dược - những công trình thể hiện tinh thần thiền định và sự hòa hợp với thiên nhiên.</p>
-        </div>
-        <div class="image-content">
-          <img src="anh6.jpg" alt="Công trình kiến trúc Yên Tử">
-        </div>
-      </div>
-      
-      <div class="content-block reverse">
-        <div class="text-content">
           <p>Đặc biệt, trên đỉnh Thiêng là Chùa Đồng, công trình bằng đồng nguyên chất lớn nhất Việt Nam, biểu tượng cho đức tin và lòng hướng thiện, cùng Tượng Phật hoàng Trần Nhân Tông bằng đồng cao 12,6m - công trình tôn vinh vị vua anh minh, vị tổ sáng lập Thiền phái Trúc Lâm.</p>
+          <p>Ngoài ra, Cung Trúc Lâm Yên Tử hiện nay cũng là điểm đến văn hóa - tín ngưỡng quan trọng, nơi tổ chức nhiều hoạt động gìn giữ và lan tỏa giá trị di sản. Tất cả những công trình ấy không chỉ tạo nên một quần thể kiến trúc độc đáo, hòa quyện giữa thiên nhiên - con người - Phật pháp, mà còn khẳng định vị thế đặc biệt của Yên Tử như một di sản văn hóa, tôn giáo và nghệ thuật sống động trong lòng dân tộc Việt Nam.</p>
         </div>
         <div class="image-content">
-          <img src="anh14.jpg" alt="Chùa Đồng Yên Tử">
+          <img src="anh18.jpg" alt="Chùa Đồng">
         </div>
       </div>
     </section>
 
+    <!-- Phần giá trị Yên Tử -->
+    <section id="giatri" class="glass fade-in">
+      <h2>GIÁ TRỊ CỦA YÊN TỬ</h2>
+      
+      <div class="content-block">
+        <div class="text-content">
+          <h3>GIÁ TRỊ LỊCH SỬ</h3>
+          <p>Với sự kiện Phật hoàng Trần Nhân Tông - vị minh quân hai lần lãnh đạo quân dân Đại Việt đánh tan giặc Nguyên Mông xâm lược - Yên Tử trở thành biểu tượng thiêng liêng của ý chí độc lập, tự cường và tinh thần giác ngộ. Sau khi hoàn thành trọng trách với non sông, Người đã chọn nơi đây để xuất gia tu hành, sáng lập Thiền phái Trúc Lâm - dòng thiền mang đậm bản sắc Việt, kết tinh giữa tư tưởng Phật giáo và truyền thống yêu nước, nhân nghĩa của dân tộc.</p>
+          <p>Chính từ Yên Tử, tư tưởng "cư trần lạc đạo", "tùy duyên mà hành đạo" đã lan tỏa, góp phần hun đúc nên đời sống tinh thần hướng thiện, an hòa của người Việt. Hàng trăm di tích còn lưu giữ như chùa Hoa Yên, chùa Một Mái, am Ngọa Vân, tháp Huệ Quang... không chỉ là chứng tích vật chất về một thời kỳ vàng son trong lịch sử, mà còn là minh chứng sống động cho trí tuệ, bản lĩnh và tấm lòng vì đạo, vì đời của dân tộc Việt Nam.</p>
+          <p>Bởi thế, Yên Tử mãi mãi là điểm tựa tâm linh và là di sản lịch sử vô giá, góp phần khẳng định bản sắc văn hóa Việt trong dòng chảy ngàn năm của dân tộc.</p>
+        </div>
+        <div class="image-content">
+          <img src="anh14.jpg" alt="Chùa Hoa Yên">
+        </div>
+      </div>
+
+      <div class="content-block reverse">
+        <div class="text-content">
+          <h3>GIÁ TRỊ VĂN HÓA - TÂM LINH</h3>
+          <p>Không chỉ mang giá trị lịch sử to lớn, Yên Tử còn là trung tâm văn hóa - tâm linh đặc sắc, nơi hội tụ và lan tỏa những giá trị tinh thần bền vững của dân tộc Việt Nam. Trải qua hơn bảy thế kỷ, tư tưởng Thiền phái Trúc Lâm Yên Tử vẫn soi sáng đời sống tinh thần của người Việt bằng triết lý "hòa quang đồng trần" - sống giữa đời mà vẫn giữ tâm thanh tịnh, hướng thiện.</p>
+          <p>Hàng năm, hàng triệu lượt tăng ni, phật tử và du khách hành hương về Yên Tử không chỉ để lễ Phật, chiêm bái cảnh thiêng mà còn để tìm về cội nguồn văn hóa dân tộc, gột rửa bụi trần, hướng tới sự an nhiên trong tâm hồn. Các nghi lễ Phật giáo, lễ hội Yên Tử được tổ chức trang trọng và mang đậm nét truyền thống, góp phần gìn giữ và phát huy di sản văn hóa phi vật thể của dân tộc.</p>
+          <p>Yên Tử vì thế không chỉ là "đất tổ Phật giáo Trúc Lâm" mà còn là biểu tượng của đời sống tinh thần Việt Nam - nơi đạo và đời giao hòa, con người tìm thấy sự cân bằng, thanh thản và niềm tin vào những giá trị tốt đẹp của cuộc sống.</p>
+        </div>
+        <div class="image-content">
+          <img src="anh13.jpg" alt="Chùa Giải Oan">
+        </div>
+      </div>
+    </section>
+
+    <!-- Phần giải pháp bảo tồn -->
+    <section id="giaiphap" class="glass fade-in">
+      <h2>GIẢI PHÁP BẢO TỒN VÀ PHÁT HUY GIÁ TRỊ YÊN TỬ</h2>
+      
+      <div class="text-content">
+        <p>Để giữ mãi linh hồn và vẻ đẹp của di tích Yên Tử - di sản vô giá của quê hương Quảng Ninh, mỗi người chúng ta cần:</p>
+        
+        <ol>
+          <li><strong>Nâng cao nhận thức và lòng tự hào dân tộc:</strong> Giáo dục học sinh, thanh thiếu niên hiểu rõ giá trị văn hóa - lịch sử của Yên Tử, từ đó hình thành ý thức trân trọng, bảo vệ di tích.</li>
+          <li><strong>Giữ gìn cảnh quan và môi trường sinh thái:</strong> Không xả rác, không phá hoại cây cối, tôn trọng không gian linh thiêng của chốn Phật môn.</li>
+          <li><strong>Phát triển du lịch bền vững:</strong> Kết hợp hài hòa giữa khai thác du lịch và bảo tồn di sản, khuyến khích du lịch xanh, du lịch trải nghiệm văn hóa.</li>
+          <li><strong>Ứng dụng công nghệ số:</strong> Xây dựng các trang tài liệu, video, tour ảo 3D giới thiệu Yên Tử đến bạn bè trong và ngoài nước, góp phần lan tỏa giá trị di tích trong thời đại mới.</li>
+          <li><strong>Tham gia hoạt động cộng đồng:</strong> Chung tay cùng chính quyền và các tổ chức xã hội trong việc trồng cây, tu bổ, làm sạch di tích - biến tình yêu Yên Tử thành hành động thiết thực.</li>
+        </ol>
+        
+        <p>Trải qua bao thăng trầm của thời gian, Phật giáo Trúc Lâm Yên Tử vẫn tỏa sáng, để lại một kho tàng di sản vật thể và phi vật thể đồ sộ từ hệ thống chùa, tháp, am, tượng Phật đến những tác phẩm văn học, nghệ thuật, triết lý thiền học thấm đẫm tinh thần dân tộc. Đó chính là tài sản văn hóa, tinh thần vô giá, đồng hành cùng lịch sử, bồi đắp nên bản sắc và tâm hồn Việt Nam hôm nay và mai sau.</p>
+        
+        <p>Yên Tử không chỉ là một danh thắng kỳ vĩ của vùng Đông Bắc, mà còn là biểu tượng rực sáng của tinh thần Việt Nam - nơi hội tụ giữa thiên nhiên, lịch sử và đạo pháp. Từ dấu chân của Phật hoàng Trần Nhân Tông hơn bảy thế kỷ trước đến bao thế hệ người Việt hôm nay, Yên Tử vẫn là điểm tựa tâm linh, là cội nguồn của sự thanh tịnh, trí tuệ và nhân ái. Mỗi bậc đá, mỗi mái chùa, ngọn tháp nơi đây đều chứa đựng hơi thở của quá khứ, gợi nhắc về truyền thống kiên cường và lòng hướng thiện của dân tộc. Giữa nhịp sống hiện đại, Yên Tử vẫn giữ nguyên giá trị thiêng liêng - một minh chứng sống động cho khát vọng gìn giữ, bảo tồn và lan tỏa di sản văn hóa Việt Nam đến muôn đời sau.</p>
+      </div>
+    </section>
+
+    <!-- Phần các di tích -->
     <section id="ditich" class="glass fade-in">
-      <h2>Di tích Yên Tử</h2>
+      <h2>CÁC CÔNG TRÌNH VÀ DI TÍCH TIÊU BIỂU TẠI YÊN TỬ</h2>
 
       <div class="content-block">
         <div class="text-content">
-          <h3>Chùa Trình</h3>
-          <p>Chùa Trình tọa lạc tại khu Bí Thượng, là ngôi chùa ở cửa ngõ Yên Tử. Đây là điểm khởi đầu cho hành trình chinh phục đỉnh thiêng Yên Tử.</p>
+          <h3>Am Ngự Dược</h3>
+          <p>Những công trình thể hiện tinh thần thiền định và sự hòa hợp với thiên nhiên.</p>
         </div>
         <div class="image-content">
-          <img src="anh7.jpg" alt="Chùa Trình Yên Tử">
-        </div>
-      </div>
-
-      <div class="content-block reverse">
-        <div class="text-content">
-          <h3>Chùa Lân (Long Động Tự)</h3>
-          <p>Chùa Lân (Long Động Tự) - một trong những địa điểm quan trọng của Thiền phái Trúc Lâm nơi Vua Trần Nhân Tông từng giảng pháp và xây dựng Viện Kỳ Lân.</p>
-        </div>
-        <div class="image-content">
-          <img src="anh8.jpg" alt="Chùa Lân Yên Tử">
-        </div>
-      </div>
-
-      <div class="content-block">
-        <div class="text-content">
-          <h3>Chùa Giải Oan</h3>
-          <p>Chùa Giải Oan gắn liền với truyền thuyết vua Trần Nhân Tông xuất gia tu hành tại Yên Tử, nơi các cung tần mỹ nữ vì thương nhớ mà trầm mình xuống suối để cầu xin Ngài trở lại triều đình.</p>
-        </div>
-        <div class="image-content">
-          <img src="anh9.jpg" alt="Chùa Giải Oan Yên Tử">
-        </div>
-      </div>
-
-      <div class="content-block reverse">
-        <div class="text-content">
-          <h3>Chùa Hoa Yên</h3>
-          <p>Là ngôi chùa to và đẹp nhất trong khu di tích Yên Tử, được xem là trung tâm của Thiền phái Trúc Lâm. Đây là nơi vua Trần Nhân Tông từng tu hành và giảng đạo.</p>
-        </div>
-        <div class="image-content">
-          <img src="anh10.jpg" alt="Chùa Hoa Yên Yên Tử">
-        </div>
-      </div>
-
-      <div class="content-block">
-        <div class="text-content">
-          <h3>Chùa Một Mái</h3>
-          <p>Ngôi chùa đặc biệt, một nửa ẩn trong hang đá, một nửa lộ thiên, tượng trưng cho sự hòa hợp giữa con người và thiên nhiên.</p>
-        </div>
-        <div class="image-content">
-          <img src="anh11.jpg" alt="Chùa Một Mái Yên Tử">
+          <img src="17.jpg" alt="Am Ngự Dược">
         </div>
       </div>
 
       <div class="content-block reverse">
         <div class="text-content">
           <h3>Chùa Bảo Sái</h3>
-          <p>Ngôi chùa nằm gần đỉnh Yên Tử, là nơi tu hành của các vị sư thầy, lưu giữ tinh hoa Thiền phái Trúc Lâm qua nhiều thế kỷ.</p>
+          <p>Linh thiêng lưu mãi dấu ấn Thiền.</p>
         </div>
         <div class="image-content">
-          <img src="anh12.jpg" alt="Chùa Bảo Sái Yên Tử">
+          <img src="anh16.jpg" alt="Chùa Bảo Sái">
         </div>
       </div>
 
       <div class="content-block">
-        <div class="text-content">
-          <h3>Am Ngự Dược</h3>
-          <p>Là nơi vua Trần Nhân Tông thường nghỉ ngơi và chữa bệnh bằng thảo dược rừng. Công trình thể hiện sự gắn kết giữa Thiền và y học cổ truyền.</p>
-        </div>
-        <div class="image-content">
-          <img src="anh13.jpg" alt="Am Ngự Dược Yên Tử">
-        </div>
-      </div>
-
-      <div class="content-block reverse">
         <div class="text-content">
           <h3>Chùa Đồng</h3>
-          <p>Ngôi chùa nằm trên đỉnh cao nhất của Yên Tử, làm bằng đồng nguyên chất, biểu tượng cho lòng thành kính và ý chí kiên định hướng thiện.</p>
+          <p>Công trình bằng đồng nguyên chất lớn nhất Việt Nam, biểu tượng cho đức tin và lòng hướng thiện.</p>
         </div>
         <div class="image-content">
-          <img src="anh14.jpg" alt="Chùa Đồng Yên Tử">
+          <img src="anh18.jpg" alt="Chùa Đồng">
         </div>
       </div>
 
-      <div class="content-block">
-        <div class="text-content">
-          <h3>Tượng Phật hoàng Trần Nhân Tông</h3>
-          <p>Tượng đúc bằng đồng cao 12,6m, thể hiện hình ảnh Đức vua khoan thai trong tư thế thiền định, biểu tượng cho tinh thần tự tại và từ bi của đạo Phật Việt Nam.</p>
-        </div>
-        <div class="image-content">
-          <img src="anh15.jpg" alt="Tượng Phật hoàng Trần Nhân Tông">
-        </div>
-      </div>
-    </section>
-
-    <section id="giatri" class="glass fade-in">
-      <h2>Giá trị của khu di tích Yên Tử</h2>
-      
-      <div class="content-block">
-        <div class="text-content">
-          <h3>Giá trị lịch sử</h3>
-          <p>Yên Tử trở thành biểu tượng thiêng liêng của ý chí độc lập, tự cường và tinh thần giác ngộ. Sau khi hoàn thành trọng trách với non sông, vua Trần Nhân Tông đã chọn nơi đây để xuất gia tu hành, sáng lập Thiền phái Trúc Lâm - dòng thiền mang đậm bản sắc Việt, kết tinh giữa tư tưởng Phật giáo và truyền thống yêu nước, nhân nghĩa của dân tộc.</p>
-          <p>Chính từ Yên Tử, tư tưởng "cư trần lạc đạo", "tùy duyên mà hành đạo" đã lan tỏa, góp phần hun đúc nên đời sống tinh thần hướng thiện, an hòa của người Việt. Hàng trăm di tích còn lưu giữ như chùa Hoa Yên, chùa Một Mái, am Ngọa Vân, tháp Huệ Quang... không chỉ là chứng tích vật chất về một thời kỳ vàng son trong lịch sử, mà còn là minh chứng sống động cho trí tuệ, bản lĩnh và tấm lòng vì đạo, vì đời của dân tộc Việt Nam.</p>
-        </div>
-        <div class="image-content">
-          <img src="anh16.jpg" alt="Giá trị lịch sử Yên Tử">
-        </div>
-      </div>
-      
       <div class="content-block reverse">
         <div class="text-content">
-          <h3>Giá trị văn hóa - tâm linh</h3>
-          <p>Không chỉ mang giá trị lịch sử to lớn, Yên Tử còn là trung tâm văn hóa - tâm linh đặc sắc, nơi hội tụ và lan tỏa những giá trị tinh thần bền vững của dân tộc Việt Nam.</p>
-          <p>Trải qua hơn bảy thế kỷ, tư tưởng Thiền phái Trúc Lâm Yên Tử vẫn soi sáng đời sống tinh thần của người Việt bằng triết lý "hòa quang đồng trần" - sống giữa đời mà vẫn giữ tâm thanh tịnh, hướng thiện.</p>
+          <h3>Yên Tử – mountain footstepsindochina.asia</h3>
         </div>
         <div class="image-content">
-          <img src="anh17.jpg" alt="Giá trị văn hóa Yên Tử">
+          <img src="anh19.jpg" alt="Yên Tử Mountain Footsteps">
         </div>
       </div>
-      
-      <div class="content-block">
-        <div class="text-content">
-          <p>Hàng năm, hàng triệu lượt tăng ni, phật tử và du khách hành hương về Yên Tử không chỉ để lễ Phật, chiêm bái cảnh thiêng mà còn để tìm về cội nguồn văn hóa dân tộc, gột rửa bụi trần, hướng tới sự an nhiên trong tâm hồn. Yên Tử vì thế không chỉ là "đất tổ Phật giáo Trúc Lâm" mà còn là biểu tượng của đời sống tinh thần Việt Nam - nơi đạo và đời giao hòa, con người tìm thấy sự cân bằng, thanh thản và niềm tin vào những giá trị tốt đẹp của cuộc sống.</p>
-        </div>
-        <div class="image-content">
-          <img src="anh18.jpg" alt="Tâm linh Yên Tử">
-        </div>
-      </div>
-    </section>
 
-    <section id="giaiphap" class="glass fade-in">
-      <h2>Giải pháp bảo tồn và phát huy giá trị Yên Tử</h2>
-      
       <div class="content-block">
         <div class="text-content">
-          <p>Để giữ mãi linh hồn và vẻ đẹp của di tích Yên Tử - di sản vô giá của quê hương Quảng Ninh, mỗi người chúng ta cần:</p>
-          
-          <ul class="solution-list">
-            <li><strong>Nâng cao nhận thức và lòng tự hào dân tộc:</strong> Giáo dục học sinh, thanh thiếu niên hiểu rõ giá trị văn hóa - lịch sử của Yên Tử, từ đó hình thành ý thức trân trọng, bảo vệ di tích.</li>
-            <li><strong>Giữ gìn cảnh quan và môi trường sinh thái:</strong> Không xả rác, không phá hoại cây cối, tôn trọng không gian linh thiêng của chốn Phật môn.</li>
-            <li><strong>Phát triển du lịch bền vững:</strong> Kết hợp hài hòa giữa khai thác du lịch và bảo tồn di sản, khuyến khích du lịch xanh, du lịch trải nghiệm văn hóa.</li>
-          </ul>
+          <h3>Chùa Giải Oan</h3>
+          <p>Gắn liền với truyền thuyết vua Trần Nhân Tông xuất gia tu hành tại Yên Tử, nơi các cung tần mỹ nữ vì thương nhớ mà trầm mình xuống suối để cầu xin Ngài trở lại triều đình.</p>
         </div>
         <div class="image-content">
-          <img src="anh19.jpg" alt="Bảo tồn Yên Tử">
+          <img src="anh13.jpg" alt="Chùa Giải Oan">
         </div>
       </div>
-      
+
       <div class="content-block reverse">
         <div class="text-content">
-          <ul class="solution-list">
-            <li><strong>Ứng dụng công nghệ số:</strong> Xây dựng các trang tài liệu, video, tour ảo 3D giới thiệu Yên Tử đến bạn bè trong và ngoài nước, góp phần lan tỏa giá trị di tích trong thời đại mới.</li>
-            <li><strong>Tham gia hoạt động cộng đồng:</strong> Chung tay cùng chính quyền và các tổ chức xã hội trong việc trồng cây, tu bổ, làm sạch di tích - biến tình yêu Yên Tử thành hành động thiết thực.</li>
-          </ul>
-          
-          <p>Yên Tử không chỉ là một danh thắng kỳ vĩ của vùng Đông Bắc, mà còn là biểu tượng rực sáng của tinh thần Việt Nam - nơi hội tụ giữa thiên nhiên, lịch sử và đạo pháp. Từ dấu chân của Phật hoàng Trần Nhân Tông hơn bảy thế kỷ trước đến bao thế hệ người Việt hôm nay, Yên Tử vẫn là điểm tựa tâm linh, là cội nguồn của sự thanh tịnh, trí tuệ và nhân ái.</p>
+          <h3>Chùa Hoa Yên</h3>
+          <p>Là ngôi chùa to và đẹp nhất trong khu di tích danh thắng Yên Tử. Đây là nơi đức vua Trần Nhân Tông đã xuất gia và sau đó lập ra Thiền phái riêng mà ngày nay mọi người vẫn gọi là Thiền phái Trúc Lâm.</p>
         </div>
         <div class="image-content">
-          <img src="anh20.jpg" alt="Giải pháp bảo tồn">
+          <img src="anh14.jpg" alt="Chùa Hoa Yên">
+        </div>
+      </div>
+
+      <div class="content-block">
+        <div class="text-content">
+          <h3>Chùa Lân (Long Động Tự)</h3>
+          <p>Một trong những địa điểm quan trọng của Thiền phái Trúc Lâm nơi Vua Trần Nhân Tông từng giảng pháp và xây dựng Viện Kỳ Lân.</p>
+        </div>
+        <div class="image-content">
+          <img src="anh12.jpg" alt="Chùa Lân">
+        </div>
+      </div>
+
+      <div class="content-block reverse">
+        <div class="text-content">
+          <h3>Chùa Một Mái</h3>
+          <p>Một trong những ngôi chùa đặc biệt của vùng non thiêng Yên Tử.</p>
+        </div>
+        <div class="image-content">
+          <img src="anh15.jpg" alt="Chùa Một Mái">
+        </div>
+      </div>
+
+      <div class="content-block">
+        <div class="text-content">
+          <h3>Chùa Trình</h3>
+          <p>Tọa lạc tại khu Bí Thượng là ngôi chùa ở cửa ngõ Yên Tử.</p>
+        </div>
+        <div class="image-content">
+          <img src="anh11.jpg" alt="Chùa Trình">
         </div>
       </div>
     </section>
 
-    <section id="thuvien" class="glass fade-in">
-      <h2>Thư viện hình ảnh</h2>
+    <!-- Phần hoạt động trải nghiệm -->
+    <section id="hoatdong" class="glass fade-in">
+      <h2>HOẠT ĐỘNG TRẢI NGHIỆM CỦA HỌC SINH TRƯỜNG THCS ĐÔNG XÁ TẠI YÊN TỬ</h2>
+
       <div class="gallery">
-        <img src="anh21.jpg" alt="Hoạt động trải nghiệm">
-        <img src="anh22.jpg" alt="Hoạt động lễ hội">
-        <img src="anh23.jpg" alt="Tập thể tham gia">
-        <img src="anh24.jpg" alt="Giới thiệu di tích">
-        <img src="anh2.jpg" alt="Học sinh trải nghiệm">
-        <img src="anh3.jpg" alt="Cáp treo Yên Tử">
-        <img src="anh14.jpg" alt="Chùa Đồng">
-        <img src="anh15.jpg" alt="Tượng Phật hoàng">
+        <img src="anh6.jpg" alt="Hoạt động 1">
+        <img src="anh7.jpg" alt="Hoạt động 2">
+        <img src="anh8.jpg" alt="Hoạt động 3">
+        <img src="anh9.jpg" alt="Hoạt động 4">
+        <img src="anh10.jpg" alt="Hoạt động 5">
+      </div>
+    </section>
+
+    <!-- Phần hình ảnh nhà trường -->
+    <section id="truong" class="glass fade-in">
+      <h2>HÌNH ẢNH NHÀ TRƯỜNG ĐÔNG XÁ</h2>
+
+      <div class="gallery">
+        <img src="anh1.jpg" alt="Trường Đông Xá 1">
+        <img src="anh2.jpg" alt="Trường Đông Xá 2">
+        <img src="anh3.jpg" alt="Trường Đông Xá 3">
+        <img src="anh4.jpg" alt="Trường Đông Xá 4">
+        <img src="anh5.jpg" alt="Trường Đông Xá 5">
+      </div>
+    </section>
+
+    <!-- Phần tượng Phật hoàng -->
+    <section id="tuongphat" class="glass fade-in">
+      <h2>TƯỢNG PHẬT HOÀNG TRẦN NHÂN TÔNG</h2>
+      <p>Tượng bằng đồng cao 12,6m – công trình tôn vinh vị vua anh minh, vị tổ sáng lập Thiền phái Trúc Lâm.</p>
+      
+      <div class="content-block">
+        <div class="text-content">
+          <h3>DI SẢN VĂN HÓA TÂM LINH</h3>
+          <p>Tượng Phật hoàng Trần Nhân Tông không chỉ là một tác phẩm nghệ thuật mà còn là biểu tượng của tinh thần dân tộc, sự kết hợp hài hòa giữa Phật giáo và văn hóa Việt Nam.</p>
+          <p>Vua Trần Nhân Tông sau khi lãnh đạo quân dân Đại Việt chiến thắng quân Nguyên Mông đã từ bỏ ngai vàng, lên núi Yên Tử tu hành và sáng lập ra Thiền phái Trúc Lâm Yên Tử - dòng thiền mang đậm bản sắc Việt Nam.</p>
+        </div>
+        <div class="image-content">
+          <img src="anh20.jpg" alt="Tượng Phật hoàng Trần Nhân Tông">
+        </div>
       </div>
     </section>
   </main>
@@ -308,5 +710,139 @@
   </footer>
 
   <button id="theme-toggle" title="Chuyển chế độ">🌙</button>
+
+  <script>
+    // Set current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Progress Bar
+    window.onscroll = function() {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById('progressBar').style.width = scrolled + '%';
+    };
+
+    // Back to Top Button
+    const backToTopButton = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopButton.classList.add('show');
+      } else {
+        backToTopButton.classList.remove('show');
+      }
+    });
+    
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Fade in animation
+    const fadeElements = document.querySelectorAll('.fade-in');
+    
+    const appearOptions = {
+      threshold: 0.15,
+      rootMargin: "0px 0px -100px 0px"
+    };
+    
+    const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+          return;
+        } else {
+          entry.target.classList.add('appear');
+          appearOnScroll.unobserve(entry.target);
+        }
+      });
+    }, appearOptions);
+    
+    fadeElements.forEach(fadeElement => {
+      appearOnScroll.observe(fadeElement);
+    });
+
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    });
+
+    // Lightbox functionality
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+    
+    let currentImageIndex = 0;
+    let images = [];
+    
+    // Get all gallery images
+    document.querySelectorAll('.gallery img').forEach(img => {
+      images.push({
+        src: img.getAttribute('src'),
+        alt: img.getAttribute('alt')
+      });
+    });
+    
+    // Add click event to gallery images
+    document.querySelectorAll('.gallery img').forEach((img, index) => {
+      img.addEventListener('click', () => {
+        currentImageIndex = index;
+        openLightbox();
+      });
+    });
+    
+    function openLightbox() {
+      lightbox.classList.add('active');
+      updateLightboxImage();
+      document.body.style.overflow = 'hidden'; // Prevent scrolling
+    }
+    
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = 'auto'; // Enable scrolling
+    }
+    
+    function updateLightboxImage() {
+      lightboxImage.setAttribute('src', images[currentImageIndex].src);
+      lightboxCaption.textContent = images[currentImageIndex].alt;
+    }
+    
+    function nextImage() {
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+      updateLightboxImage();
+    }
+    
+    function prevImage() {
+      currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+      updateLightboxImage();
+    }
+    
+    // Event listeners for lightbox controls
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxNext.addEventListener('click', nextImage);
+    lightboxPrev.addEventListener('click', prevImage);
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('active')) return;
+      
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'ArrowLeft') prevImage();
+    });
+    
+    // Close lightbox when clicking outside the image
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+  </script>
 </body>
 </html>
